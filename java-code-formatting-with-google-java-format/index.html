@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Java Code Formatting With Google Java Format</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/java-code-formatting-with-google-java-format/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Java Code Formatting With Google Java Format" />
+    <meta property="og:description" content="Most projects, that I work with nowadays, have a defined code standard that includes how the code should be formatted. That is great and improves code quality a lot... if followed! A single person, in the project, can lower the quality significantly by not formatting the code correctly. If such" />
+    <meta property="og:url" content="https://bjurr.com/java-code-formatting-with-google-java-format/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2018/02/java.png" />
+    <meta property="article:published_time" content="2017-06-11T20:47:00.000Z" />
+    <meta property="article:modified_time" content="2018-08-30T18:18:39.000Z" />
+    <meta property="article:tag" content="Java" />
+    <meta property="article:tag" content="continuous-integration" />
+    <meta property="article:tag" content="tools" />
+    <meta property="article:tag" content="maven" />
+    <meta property="article:tag" content="Gradle" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Java Code Formatting With Google Java Format" />
+    <meta name="twitter:description" content="Most projects, that I work with nowadays, have a defined code standard that includes how the code should be formatted. That is great and improves code quality a lot... if followed! A single person, in the project, can lower the quality significantly by not formatting the code correctly. If such" />
+    <meta name="twitter:url" content="https://bjurr.com/java-code-formatting-with-google-java-format/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2018/02/java.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Java, continuous-integration, tools, maven, Gradle" />
+    <meta property="og:image:width" content="379" />
+    <meta property="og:image:height" content="512" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Java Code Formatting With Google Java Format",
+    "url": "https://bjurr.com/java-code-formatting-with-google-java-format/",
+    "datePublished": "2017-06-11T20:47:00.000Z",
+    "dateModified": "2018-08-30T18:18:39.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2018/02/java.png",
+        "width": 379,
+        "height": 512
+    },
+    "keywords": "Java, continuous-integration, tools, maven, Gradle",
+    "description": "Most projects, that I work with nowadays, have a defined code standard that includes how the code should be formatted. That is great and improves code quality a lot... if followed! A single person, in the project, can lower the quality significantly by not formatting the code correctly. If such",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-java tag-continuous-integration tag-tools tag-maven tag-gradle">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-java tag-continuous-integration tag-tools tag-maven tag-gradle ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2017-06-11">11 June 2017</time>
+                        <span class="date-divider">/</span> <a href="/tag/java/">Java</a>
+                </section>
+                <h1 class="post-full-title">Java Code Formatting With Google Java Format</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2018/02/java.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>Most projects, that I work with nowadays, have a defined code standard that includes how the code should be formatted. That is great and improves code quality a lot... if followed!</p>
+<p>A single person, in the project, can lower the quality significantly by not formatting the code correctly. If such code is not blocked, from making it into shared branches, you will have the choice of keeping it or fixing it. This is a problem that I find incredibly annoying!</p>
+<ul>
+<li><em>Keeping it</em> means you have to live with faulty formatted code. If some developers use something like <em>save actions</em> in <strong>Eclipse</strong> then they will have a hard time keeping the lines unchanged when working on the file.</li>
+<li><em>Re-formatting it</em> in a new commit makes it harder to maintain the project because things like <code>git blame</code> will show the re-format commit, not the original feature commit.</li>
+</ul>
+<p>The most common solution to this, among the clients I've been working with, is to use a code style defined in <strong>Eclipse</strong>. Along with <em>save actions</em>. The code style is imported to <strong>Eclipse</strong> from an XML-file and some clients also use <a href="http://marketplace.eclipse.org/content/workspace-mechanic">Workspace Mechanics</a> to setup <em>save actions</em> properly.</p>
+<p>Defining the code style in <strong>Eclipse</strong> is a very bad idea:</p>
+<ul>
+<li>All people are not productive in <strong>Eclipse</strong>, some might for example be using <strong>InteliJ</strong> or <strong>NetBeans</strong>. They will have to have <strong>Eclipse</strong> installed just to use it for formatting.</li>
+<li>The semantics of the settings in the code style may change between versions of <strong>Eclipse</strong> (I have seen it!). Then you may start getting unnecessary diffs in commits after an upgrade.</li>
+<li>There is no way, as far as I know, to verify <strong>Eclipse</strong>-formatting as a step in a continuous integration flow. While it is easy for a reviewer to see that brackets are incorrectly positioned, other things may not be as obvious.</li>
+</ul>
+<h1 id="googlejavaformat">Google Java Format</h1>
+<p>If it is up to me, I choose <a href="https://github.com/google/google-java-format">Google Java Format</a>. Because:</p>
+<ul>
+<li>There are plugins for Gradle and Maven so that it can easily be integrated in the build process. Applied when building and verified in continuous integration.</li>
+<li>It takes all decisions regarding formatting of Java code. It can even optimize imports, sorting and removing unused imports.</li>
+<li>All decisions in this code style is carefully taken considering how diffs will appear in files where it is applied.</li>
+<li>The code style, and the tool support for that, is completely separate from any IDE used. You can let the developers use whatever IDE they want. The important thing is what they produce, the code, which should have no references to any IDE.</li>
+</ul>
+<p>I use these in different projects:</p>
+<ul>
+<li><a href="https://github.com/coveo/fmt-maven-plugin">FMT Maven Plugin</a>. You just need to add it to the <code>pom.xml</code> and it will format the code at compile time. It includes a <a href="https://github.com/coveo/fmt-maven-plugin/blob/master/src/main/java/com/coveo/FMT.java#L62">validate</a> attribute that can be used in continuous integration, perhaps with a build property, to validate that the code is formatted correctly.</li>
+<li><a href="https://github.com/sherter/google-java-format-gradle-plugin">Google Java Format Gradle Plugin</a>. You just need to add it to the <code>build.gradle</code> and it can format the code at compile time with something like <code>compileJava.dependsOn 'googleJavaFormat'</code>. It adds a <code>verifyGoogleJavaFormat</code> task to be used in continuous integration to verify formatting.</li>
+</ul>
+<p>A common problem when auto formatting coding is with newlines. I use <em>phantom comments</em> to deal with that. Just add <code>//</code> at the end of the line, like <a href="https://github.com/tomasbjerre/violations-lib/blob/master/src/main/java/se/bjurr/violations/lib/parsers/CheckStyleParser.java">this</a>, to force the formatter to keep it that way.</p>
+
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/java/">Java</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/automatic-stubs-with-wiremock/">Automatic stubs with Wiremock and JAX-RS</a></li>
+                            <li><a href="/moving-to-intellij-idea-from-eclipse/">Moving to IntelliJ IDEA from Eclipse</a></li>
+                            <li><a href="/yet-another-kotlin-vs-java-comparison/">Yet Another Kotlin VS Java Comparison</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/java/">See all 8 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-swedish tag-aktiebolag tag-bokforing">
+        <a class="post-card-image-link" href="/starta-eget-konsultbolag/">
+            <div class="post-card-image" style="background-image: url(/content/images/2017/12/vid_poolen.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/starta-eget-konsultbolag/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Swedish</span>
+                <h2 class="post-card-title">Starta Eget Konsultbolag</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Efter över 7 år som anställd konsult (mjukvaruutvecklare) valde jag nyligen att starta eget aktiebolag. Jag gör precis samma sak nu som jag gjorde som anställd men numera i mitt eget bolag istället.</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">15 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-gitlab tag-jenkins tag-continuous-integration tag-git">
+        <a class="post-card-image-link" href="/continuous-integration-with-gitlab-and-jenkins/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/gitlab.jpg)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/continuous-integration-with-gitlab-and-jenkins/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">GitLab</span>
+                <h2 class="post-card-title">Continuous Integration with GitLab and Jenkins</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>My client recently started using GitLab. I did not find the plugins needed to properly verify merge requests. Here is what I wanted to do: Trigger on merge requests events. Merge, compile, test</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">2 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Java Code Formatting With Google Java Format</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Java%20Code%20Formatting%20With%20Google%20Java%20Format&amp;url=https://bjurr.com/java-code-formatting-with-google-java-format/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/java-code-formatting-with-google-java-format/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

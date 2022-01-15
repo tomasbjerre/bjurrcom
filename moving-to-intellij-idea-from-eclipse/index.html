@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Moving to IntelliJ IDEA from Eclipse</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/moving-to-intellij-idea-from-eclipse/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Moving to IntelliJ IDEA from Eclipse" />
+    <meta property="og:description" content="Being a long time Eclipse user I recently started using IntelliJ. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.ComparisonHere are some of the topics that I thought were most interesting when doing the switch.Free and Open" />
+    <meta property="og:url" content="https://bjurr.com/moving-to-intellij-idea-from-eclipse/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2018/08/intellij.jpeg" />
+    <meta property="article:published_time" content="2018-08-28T17:40:40.000Z" />
+    <meta property="article:modified_time" content="2020-12-13T08:22:06.000Z" />
+    <meta property="article:tag" content="intellij" />
+    <meta property="article:tag" content="Java" />
+    <meta property="article:tag" content="eclipse" />
+    <meta property="article:tag" content="ide" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Moving to IntelliJ IDEA from Eclipse" />
+    <meta name="twitter:description" content="Being a long time Eclipse user I recently started using IntelliJ. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.ComparisonHere are some of the topics that I thought were most interesting when doing the switch.Free and Open" />
+    <meta name="twitter:url" content="https://bjurr.com/moving-to-intellij-idea-from-eclipse/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2018/08/intellij.jpeg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="intellij, Java, eclipse, ide" />
+    <meta property="og:image:width" content="225" />
+    <meta property="og:image:height" content="225" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Moving to IntelliJ IDEA from Eclipse",
+    "url": "https://bjurr.com/moving-to-intellij-idea-from-eclipse/",
+    "datePublished": "2018-08-28T17:40:40.000Z",
+    "dateModified": "2020-12-13T08:22:06.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2018/08/intellij.jpeg",
+        "width": 225,
+        "height": 225
+    },
+    "keywords": "intellij, Java, eclipse, ide",
+    "description": "Being a long time Eclipse user I recently started using IntelliJ. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.ComparisonHere are some of the topics that I thought were most interesting when doing the switch.Free and Open",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-intellij tag-java tag-eclipse tag-ide">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-intellij tag-java tag-eclipse tag-ide ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2018-08-28">28 August 2018</time>
+                        <span class="date-divider">/</span> <a href="/tag/intellij/">intellij</a>
+                </section>
+                <h1 class="post-full-title">Moving to IntelliJ IDEA from Eclipse</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2018/08/intellij.jpeg)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>Being a long time <strong>Eclipse</strong> user I recently started using <strong>IntelliJ</strong>. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.</p><h1 id="comparison">Comparison</h1><p>Here are some of the topics that I thought were most interesting when doing the switch.</p><h2 id="free-and-open-source">Free and Open Source</h2><p>I don't want to depend on software that is not free and open source. That, to me, feels like a trap and something I want to avoid. </p><p><strong>Eclipse</strong> is <a href="https://www.eclipse.org/downloads/">free</a> and <a href="https://github.com/eclipse">open source</a>.</p><p><strong>IntelliJ</strong> has a <a href="https://www.jetbrains.com/idea/download/">community edition</a> that is also free and <a href="https://github.com/JetBrains/intellij-community">open source</a>. This is the one I use.</p><p>This is totally fine for me. <em>Less is more</em>!</p><h2 id="synchronize-settings">Synchronize Settings</h2><p>I want to automatically have my IDE setup exactly how I want it and synchronize that to all my installations. Avoiding the time consuming task of searching for settings and clicking checkboxes.</p><p>In<strong> Eclipse</strong> I use Workspace Mechanics. The mechanics files are put under version control so that all developers of a project will have changes applied immediately when someone changes the settings.</p><p>In<strong> IntelliJ</strong> this is built in. In the menu, <em>File -&gt; Settings Repository</em> you can add any git-repository. I just created a new <a href="https://github.com/tomasbjerre/intelij-settings">repository on GitHub</a> and is now using that clone URL. To publish settings you do <em>File -&gt; Settings Repository</em> and click <em>Merge</em>.</p><figure class="kg-card kg-image-card"><img src="/content/images/2018/08/intellij-settings.png" class="kg-image"><figcaption><a>git@github.com</a>:tomasbjerre/intelij-settings.git</figcaption></figure><p>I have seen that some settings are not synchronized when using <strong>IntelliJ</strong>. I really miss <em>automatically download sources</em> and <em>documentation</em> and most annoyingly is the option to <em>optimize imports on the fly</em>.</p><figure class="kg-card kg-image-card"><img src="/content/images/2018/08/intellij-maven-download-sources.png" class="kg-image"><figcaption>Intellij - Download sources and documentation</figcaption></figure><figure class="kg-card kg-image-card"><img src="/content/images/2018/08/intellij-optimize-imports-1.png" class="kg-image"><figcaption>Intellij - Optimize imports on the fly</figcaption></figure><h2 id="opening-several-projects-in-same-window">Opening Several Projects In Same Window</h2><p>In <strong>Eclipse</strong> you would create a workspace and import projects in that workspace.</p><p>In <strong>IntelliJ</strong> you create a project and add modules to it. A module can be a Maven, or Gradle, project. You do:</p><ul><li><em>File -&gt; New -&gt; Project ...</em></li><li><em>Empty project</em></li><li>Name it anything you like</li><li>Finnish</li></ul><p>Now to add a Gradle project to it, you do:</p><ul><li>File -&gt; New -&gt; Module From Existing Sources...</li><li>Select the <em>build.gradle</em> file. If it were Maven you would select the <em>pom.xml</em> file</li></ul><h2 id="maintaining-a-code-standard">Maintaining a Code Standard</h2><p>In<strong> Eclipse</strong> you can setup save actions that will apply the code standard whenever a file is saved.</p><p>In<strong> IntelliJ</strong> I have not found any way of enforcing a code standard. It does a good job on understanding and adhering to how the current file already is formatted.</p><p>I always use an external tool for coder formatting, if I can find one. So that developers can use any editor. But sometimes I am not the maintainer of the project or other developers don't agree with me about doing it that way.</p><h2 id="automatically-boost-code-quality">Automatically Boost Code Quality</h2><p>In <strong>Eclipse</strong> I would setup save actions to automatically do things like:</p><ul><li>Remove unused variables</li><li>Organize imports, sorting and removing unused imports</li><li>Adding final keyword to immutable attributes and variables</li><li>Remove trailing white space</li></ul><p>In <strong>IntelliJ</strong> you can find these settings by simply searching in the settings menu (<em>File -&gt; Settings</em>).</p><figure class="kg-card kg-image-card"><img src="/content/images/2018/08/intellij-imports.png" class="kg-image"><figcaption>IntelliJ - Settings search</figcaption></figure><p>This will organize the imports when you are working with a file. You can also batch this by marking a folder in the menu and press <strong>CTRL-ALT-O</strong>.</p><figure class="kg-card kg-image-card"><img src="/content/images/2018/08/intellij-imports-folder.png" class="kg-image"><figcaption>IntelliJ - Batch optimize imports</figcaption></figure><h1 id="compilationerrors">Compilation errors</h1>
+<p>In <strong>Eclipse</strong> I let <strong>Eclipse</strong> compile the code whenever I change anything. I immedely get clear feedback if any code does not compile.</p>
+<p><img src="/content/images/2020/12/eclipse-compilation-error.png" alt="eclipse-compilation-error"></p>
+<p>I struggle with this in <strong>IntelliJ</strong>. It does not tell me about code that does not compile.</p>
+<p><img src="/content/images/2020/12/intellij-compilation-error-not.png" alt="intellij-compilation-error-not"></p>
+<p>If I manually browse to a file that I know does not compile, and open it, <strong>IntelliJ</strong> will tell me it does not compile.</p>
+<p><img src="/content/images/2020/12/intellij-compilation-error.png" alt="intellij-compilation-error"></p>
+<p>This is annoying as I keep getting compilation errors when building outside of <strong>IntelliJ</strong> which slows me down.</p>
+<h1 id="revealfileinprojectview">Reveal file in project view</h1>
+<p>In <strong>Eclipse</strong> I can reveal whatever file I open in the project view to the right.</p>
+<p><img src="/content/images/2020/12/eclipse-reveal-menu.png" alt="eclipse-reveal-menu"></p>
+<p>It can be done in <strong>Intellij</strong> also.</p>
+<p><img src="/content/images/2020/12/intellij-revel-menu.png" alt="intellij-revel-menu"></p>
+<h1 id="showprojectsandtheirparts">Show projects and their parts</h1>
+<p><strong>Eclipse</strong> does a really good job showing me projects and their parts. The project, source-folders, packages and files.</p>
+<p><img src="/content/images/2020/12/eclipse-parts.png" alt="eclipse-parts"></p>
+<p>In <strong>IntelliJ</strong> I found <em>flattern packages</em>.</p>
+<p><img src="/content/images/2020/12/intellij-flattern-packages.png" alt="intellij-flattern-packages"></p>
+<p>But it is not as clear as with <strong>Eclipse</strong>.</p>
+<p><img src="/content/images/2020/12/intellij-flatterned.png" alt="intellij-flatterned"></p>
+<h1 id="conclusions">Conclusions</h1><p>I am missing some features in <strong>IntelliJ</strong> regarding automatically correcting things in the code. But that is easily solved with Maven or Gradle. I wrote about that <a href="https://bjurr.com/java-code-formatting-with-google-java-format/">here</a>.</p>
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+
+                <article class="post-card post tag-jenkins tag-pipeline tag-gitlab tag-continuous-integration">
+        <a class="post-card-image-link" href="/jenkins-configuration-as-code-and-gitlab/">
+            <div class="post-card-image" style="background-image: url(/content/images/2019/02/superhero.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/jenkins-configuration-as-code-and-gitlab/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Jenkins</span>
+                <h2 class="post-card-title">Jenkins Configuration as Code and GitLab</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I used Jenkins Configuration as Code and GitLab to demonstrate how Jenkins and its configuration (jobs, build process and global configuration) can be version controlled and fully automated.</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">3 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-kotlin tag-java">
+        <a class="post-card-image-link" href="/yet-another-kotlin-vs-java-comparison/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/08/kotlin_250x250.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/yet-another-kotlin-vs-java-comparison/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">kotlin</span>
+                <h2 class="post-card-title">Yet Another Kotlin VS Java Comparison</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I recently started developing an application with Kotlin. I found myself constantly wondering exactly what effect the Kotlin features have on the actual compiled classes. I was able to automatically generate the answers</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">1 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Moving to IntelliJ IDEA from Eclipse</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Moving%20to%20IntelliJ%20IDEA%20from%20Eclipse&amp;url=https://bjurr.com/moving-to-intellij-idea-from-eclipse/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/moving-to-intellij-idea-from-eclipse/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

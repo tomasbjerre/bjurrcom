@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Jenkins Integration on Steroids</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/jenkins-integration-on-steroids/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Jenkins Integration on Steroids" />
+    <meta property="og:description" content="Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some GET parameters. Generic Webhook Trigger aims at simplifying triggering of jobs from complex JSON/XML webhook structures. I got the idea while working on the GitLab plugin. I just needed" />
+    <meta property="og:url" content="https://bjurr.com/jenkins-integration-on-steroids/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2018/04/superhero.png" />
+    <meta property="article:published_time" content="2018-04-03T17:51:44.000Z" />
+    <meta property="article:modified_time" content="2018-09-04T21:01:54.000Z" />
+    <meta property="article:tag" content="Jenkins" />
+    <meta property="article:tag" content="pipeline" />
+    <meta property="article:tag" content="continuous-integration" />
+    <meta property="article:tag" content="Git" />
+    <meta property="article:tag" content="tools" />
+    <meta property="article:tag" content="GitLab" />
+    <meta property="article:tag" content="GitHub" />
+    <meta property="article:tag" content="Bitbucket Server" />
+    <meta property="article:tag" content="Stash" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jenkins Integration on Steroids" />
+    <meta name="twitter:description" content="Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some GET parameters. Generic Webhook Trigger aims at simplifying triggering of jobs from complex JSON/XML webhook structures. I got the idea while working on the GitLab plugin. I just needed" />
+    <meta name="twitter:url" content="https://bjurr.com/jenkins-integration-on-steroids/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2018/04/superhero.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Jenkins, pipeline, continuous-integration, Git, tools, GitLab, GitHub, Bitbucket Server, Stash" />
+    <meta property="og:image:width" content="320" />
+    <meta property="og:image:height" content="310" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Jenkins Integration on Steroids",
+    "url": "https://bjurr.com/jenkins-integration-on-steroids/",
+    "datePublished": "2018-04-03T17:51:44.000Z",
+    "dateModified": "2018-09-04T21:01:54.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2018/04/superhero.png",
+        "width": 320,
+        "height": 310
+    },
+    "keywords": "Jenkins, pipeline, continuous-integration, Git, tools, GitLab, GitHub, Bitbucket Server, Stash",
+    "description": "Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some GET parameters. Generic Webhook Trigger aims at simplifying triggering of jobs from complex JSON/XML webhook structures. I got the idea while working on the GitLab plugin. I just needed",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-jenkins tag-pipeline tag-continuous-integration tag-git tag-tools tag-gitlab tag-github tag-bitbucket-server tag-stash">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-jenkins tag-pipeline tag-continuous-integration tag-git tag-tools tag-gitlab tag-github tag-bitbucket-server tag-stash ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2018-04-03">3 April 2018</time>
+                        <span class="date-divider">/</span> <a href="/tag/jenkins/">Jenkins</a>
+                </section>
+                <h1 class="post-full-title">Jenkins Integration on Steroids</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2018/04/superhero.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some <em>GET</em> parameters. <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> aims at simplifying triggering of jobs from complex <em>JSON</em>/<em>XML</em> webhook structures.</p>
+<p>I got the idea while working on the GitLab plugin. I <a href="https://github.com/jenkinsci/gitlab-plugin/pull/510">just needed a simple integer</a> value from the GitLab webhook. After I opened <a href="https://github.com/jenkinsci/gitlab-plugin/pull/510">the PR</a>, it took 4+ months before it was merged and later released. Such a simple thing should not require that level of effort. But it is, and it is like that in other trigger plugins as well!</p>
+<p>The idea with <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> is very simple.</p>
+<ol>
+<li>Post content is received.</li>
+<li>Values are extracted from the received post content, using <a href="https://github.com/json-path/JsonPath">JSONPath</a> or <a href="https://www.w3schools.com/xml/xpath_intro.asp">XPath</a>. And are contributed to the build with the configured variable names.</li>
+<li><a href="https://jex.im/regulex/">Regular expression</a> is used to match the patterns that should trigger a build.</li>
+</ol>
+<p>The webhooks provided by different services are often well documented. In contrast to all the different Jenkins plugins that consume them. That shows another advantage of using <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a>. You will be able to understand what you are doing. The alternative is to spend many frustrating hours with a bunch of very complex plugins.</p>
+<p>I think most Jenkins users just wants a way to consume a webhook. <a href="https://plugins.jenkins.io/generic-webhook-trigger">This plugin</a> enables that and lets the users implement any use cases themselves. I think that is the best way to do it now that we have pipelines. Before pipelines there was a bigger need for complex plugins.</p>
+<h2 id="simpleusecase">Simple use case</h2>
+<p>Let's say we have a Git repository. It has some files in it, structured something like this:</p>
+<pre><code>src/main/java/...
+src/test/java/...
+src/main/resources/sql/...
+</code></pre>
+<h3 id="requirements">Requirements</h3>
+<ul>
+<li>If the files in <code>src/main/resources/sql</code> is changed, then we want to run the SQL in a Docker to verify them. If these files are not changed, then we don't want to verify them. Perhaps it is a time consuming task and we want to avoid it.</li>
+<li>We are not allowed to use polling. We want instant builds and cannot have a large amount of Jenkins jobs polling our Git service every minute.</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<p>First step would be to setup the webhook in GitHub and point it to the running Jenkins instance.</p>
+<ul>
+<li>Go to the webhooks page: <a href="https://github.com/tomasbjerre/you-repo-name/settings/hooks/">https://github.com/tomasbjerre/you-repo-name/settings/hooks/</a>
+<ul>
+<li>Set the <em>Content type</em> to <code>application/json</code></li>
+<li>Set the <em>Payload URL</em> to <code>http://JENKINS_URL/generic-webhook-trigger/invoke?token=abc123</code></li>
+</ul>
+</li>
+</ul>
+<p>Next step, create a job in Jenkins and configure <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a>. It supports Multibranch pipelines but I usually just create pipeline jobs using <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">Job DSL Plugin</a>. That is a bit off topic and covered in the documentation in GitHub.</p>
+<ul>
+<li>Go to you Jenkins instance: <a href="http://localhost:8080/jenkins/">http://localhost:8080/jenkins/</a></li>
+<li>Create a new job, perhaps Pipeline or Free Style.</li>
+<li>A new Trigger will appear, once <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> is installed, named &quot;<em>Generic Webhook Trigger</em>&quot;. I'm adding variable named <code>changed_files</code> with expression <code>$.commits[*].['modified','added','removed'][*]</code>.<br>
+<img src="/content/images/2018/04/generic_trigger_expr_files.png" alt="generic_trigger_expr_files"> You will probably want more variables here. Perhaps <code>$.ref</code> to get the branch name or <code>$.after</code> to get the commit that the ref points at after the change.</li>
+<li>Configure a token, this is how the invoker will know which job to trigger. If a job has a token configured then that token has to be supplied. If the job has no token configured then anyone can trigger the job.<br>
+<img src="/content/images/2018/08/configure-token-1.png" alt="configure-token-1"></li>
+<li>Add a filter with <code>text</code> like <code>$changed_files</code> and <code>expression</code> like <code>&quot;src/main/resources/sql/[^&quot;]+?&quot;</code>.<br>
+<img src="/content/images/2018/04/generic_expr_folder.png" alt="generic_expr_folder">  I'm only using one variable here but you can resolve more variables. Add more variables to the text-field and have a more complex regular expression.</li>
+</ul>
+<p>That is it. Save the job and it will trigger for changes in SQL-scripts and nothing else!</p>
+<h3 id="explaination">Explaination</h3>
+<p>So what happens in the example above? When a commit is pushed to GitHub, it will invoke the the configured URL with a webhook. In reality, there is <a href="https://developer.github.com/v3/activity/events/types/#pushevent">much more</a> in the webhook then this:</p>
+<pre><code>{
+ &quot;ref&quot;: &quot;refs/heads/changes&quot;,
+ &quot;after&quot;: &quot;0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c&quot;,
+ &quot;commits&quot;: [
+  {
+   &quot;added&quot;: [
+    &quot;.gitignore&quot;
+   ],
+   &quot;removed&quot;: [
+   ],
+   &quot;modified&quot;: [
+    &quot;README.md&quot;,
+    &quot;src/main/resources/sql/some_script.sql&quot;
+   ]
+  }
+ ],
+ repository {
+  &quot;git_url&quot;: &quot;git://github.com/baxterthehacker/public-repo.git&quot;
+ }
+}
+</code></pre>
+<p>The <a href="https://github.com/json-path/JsonPath">JSONPath</a> used above will resolve to <code>[&quot;.gitignore&quot;, &quot;README.md&quot;, &quot;src/main/resources/sql/some_script.sql&quot;]</code> and it will be available in a variable <code>$changed_files</code> (that can also be used later in the build).</p>
+<p>The <code>text</code> field of the <em>Optional filter</em> will also resolve to this, because we used <code>$changed_files</code> in that field.</p>
+<p>The <code>expression</code> field of the <em>Optional filter</em> will match <code>src/main/resources/sql/some_script.sql</code> which will trigger the build. Without that change, the build would not have been triggered.</p>
+<p>If you also define variables like:</p>
+<ul>
+<li><strong>branch</strong> with expression <code>$.ref</code></li>
+<li><strong>clone_url</strong> with expression <code>$.repository.git_url</code></li>
+</ul>
+<p>Then you can have a shell script build step like:</p>
+<pre><code>git clone $clone_url
+git checkout $branch
+...
+</code></pre>
+<h2 id="furtherreading">Further reading</h2>
+<p>Always turn to the wiki for the most accurate documentation:<br>
+<a href="https://plugins.jenkins.io/generic-webhook-trigger">https://plugins.jenkins.io/generic-webhook-trigger</a></p>
+<p>Any issues should be reported here:<br>
+<a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/issues">https://github.com/jenkinsci/generic-webhook-trigger-plugin/issues</a></p>
+
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/jenkins/">Jenkins</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/release-from-jenkins-by-pushing-git-tags/">Release from Jenkins by pushing Git tags</a></li>
+                            <li><a href="/jenkins-configuration-as-code-and-gitlab/">Jenkins Configuration as Code and GitLab</a></li>
+                            <li><a href="/managing-1000-repos-in-jenkins-with-a-breeze/">Managing 1000+ Git repositories in Jenkins with a breeze</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/jenkins/">See all 9 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-kotlin tag-java">
+        <a class="post-card-image-link" href="/yet-another-kotlin-vs-java-comparison/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/08/kotlin_250x250.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/yet-another-kotlin-vs-java-comparison/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">kotlin</span>
+                <h2 class="post-card-title">Yet Another Kotlin VS Java Comparison</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I recently started developing an application with Kotlin. I found myself constantly wondering exactly what effect the Kotlin features have on the actual compiled classes. I was able to automatically generate the answers</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">1 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-jenkins tag-pipeline tag-continuous-integration tag-git">
+        <a class="post-card-image-link" href="/managing-1000-repos-in-jenkins-with-a-breeze/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/superhero-1.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/managing-1000-repos-in-jenkins-with-a-breeze/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Jenkins</span>
+                <h2 class="post-card-title">Managing 1000+ Git repositories in Jenkins with a breeze</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">7 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Jenkins Integration on Steroids</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Jenkins%20Integration%20on%20Steroids&amp;url=https://bjurr.com/jenkins-integration-on-steroids/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/jenkins-integration-on-steroids/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

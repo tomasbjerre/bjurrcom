@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Building Atlassian Stash pull requests in Jenkins</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/building-atlassian-stash-pull-requests-in-jenkins/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Building Atlassian Stash pull requests in Jenkins" />
+    <meta property="og:description" content="Update 160912: There is a new post here. We are just about to introduce pull requests at my current position. We are using Git with Atlassian Stash and Jenkins. We want to verify that the pull requests: Compile Does not break any test cases Can be merged to target branch" />
+    <meta property="og:url" content="https://bjurr.com/building-atlassian-stash-pull-requests-in-jenkins/" />
+    <meta property="article:published_time" content="2015-02-18T16:25:34.000Z" />
+    <meta property="article:modified_time" content="2017-03-18T19:18:18.000Z" />
+    <meta property="article:tag" content="Jenkins" />
+    <meta property="article:tag" content="Git" />
+    <meta property="article:tag" content="Atlassian" />
+    <meta property="article:tag" content="Stash" />
+    <meta property="article:tag" content="Pull Request" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Building Atlassian Stash pull requests in Jenkins" />
+    <meta name="twitter:description" content="Update 160912: There is a new post here. We are just about to introduce pull requests at my current position. We are using Git with Atlassian Stash and Jenkins. We want to verify that the pull requests: Compile Does not break any test cases Can be merged to target branch" />
+    <meta name="twitter:url" content="https://bjurr.com/building-atlassian-stash-pull-requests-in-jenkins/" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Jenkins, Git, Atlassian, Stash, Pull Request" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Building Atlassian Stash pull requests in Jenkins",
+    "url": "https://bjurr.com/building-atlassian-stash-pull-requests-in-jenkins/",
+    "datePublished": "2015-02-18T16:25:34.000Z",
+    "dateModified": "2017-03-18T19:18:18.000Z",
+    "keywords": "Jenkins, Git, Atlassian, Stash, Pull Request",
+    "description": "Update 160912: There is a new post here. We are just about to introduce pull requests at my current position. We are using Git with Atlassian Stash and Jenkins. We want to verify that the pull requests: Compile Does not break any test cases Can be merged to target branch",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-jenkins tag-git tag-atlassian tag-stash tag-pull-request">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-jenkins tag-git tag-atlassian tag-stash tag-pull-request no-image">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2015-02-18">18 February 2015</time>
+                        <span class="date-divider">/</span> <a href="/tag/jenkins/">Jenkins</a>
+                </section>
+                <h1 class="post-full-title">Building Atlassian Stash pull requests in Jenkins</h1>
+            </header>
+
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>Update 160912: There is a <a href="http://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/">new post here</a>.</p>
+<p>We are just about to introduce pull requests at my current position. We are using Git with Atlassian Stash and Jenkins. We want to verify that the pull requests:</p>
+<ul>
+<li>Compile</li>
+<li>Does not break any test cases</li>
+<li>Can be merged to target branch</li>
+<li>Compiles after merge</li>
+<li>Does not break test cases after merge</li>
+</ul>
+<p>After some Googling around the issue I found no solution, so I tought I'd make a post about how I solved it.</p>
+<h1 id="verifyingsourceofthepullrequest">Verifying source of the pull request</h1>
+<p>There is a really nice plugin for Jenkins <a href="https://wiki.jenkins-ci.org/display/JENKINS/StashNotifier+Plugin">Stash Notifier Plugin</a> that can be used to notify Stash of the status of a build. Enable it on any Jenkins job that builds the branch you are merging from. It will add an icon and a link to Jenkins in the pull request view of Stash.</p>
+<h1 id="discoveringnewpullrequests">Discovering new pull requests</h1>
+<p>I initially solved this with a Jenkins job that is polling Stash for new pull requests. But polling is never good so I created a Stash plugin that will notify Jenkins about new pull requests.</p>
+<h2 id="pullrequestnotifierpluginforstash">Pull Request Notifier Plugin for Stash</h2>
+<p>The plugin is available in <a href="https://marketplace.atlassian.com/plugins/se.bjurr.prnfs.pull-request-notifier-for-stash">Atlassian Marketplace</a> and at <a href="https://github.com/tomasbjerre/pull-request-notifier-for-stash">GitHub</a>. When installed, you will have this configuration GUI.</p>
+<p><img src="/content/images/2015/04/variables.png" alt="pull-request-notifier-for-stash"></p>
+<p>The features include:</p>
+<ul>
+<li>Trigger on one, or several, event(s) regarding pull requests.</li>
+<li>Invoke one, or several, URL(s) when event(s) are triggered.</li>
+<li>Optionally with <em>basic authentication</em> headers.</li>
+<li>Completely custom URL supporting variable parameters
+<ul>
+<li>${PULL_REQUEST_ID} Example: 1</li>
+<li>${PULL_REQUEST_ACTION} Example: OPENED</li>
+<li>${PULL_REQUEST_AUTHOR_DISPLAY_NAME} Example: Administrator</li>
+<li>${PULL_REQUEST_AUTHOR_EMAIL} Example: <a href="mailto:admin@example.com">admin@example.com</a></li>
+<li>${PULL_REQUEST_AUTHOR_ID} Example: 1</li>
+<li>${PULL_REQUEST_AUTHOR_NAME} Example: admin</li>
+<li>${PULL_REQUEST_AUTHOR_SLUG} Example: admin</li>
+<li>${PULL_REQUEST_FROM_HASH} Example: 6053a1eaa1c009dd11092d09a72f3c41af1b59ad</li>
+<li>${PULL_REQUEST_FROM_ID} Example: refs/heads/branch_mod_merge</li>
+<li>${PULL_REQUEST_FROM_REPO_ID} Example: 1</li>
+<li>${PULL_REQUEST_FROM_REPO_NAME} Example: rep_1</li>
+<li>${PULL_REQUEST_FROM_REPO_PROJECT_ID} Example: 1</li>
+<li>${PULL_REQUEST_FROM_REPO_PROJECT_KEY} Example: PROJECT_1</li>
+<li>${PULL_REQUEST_FROM_REPO_SLUG} Example: rep_1</li>
+<li>And same variables for TO, like: ${PULL_REQUEST_TO_HASH}</li>
+</ul>
+</li>
+</ul>
+<p>You can have several notifications and have them trigger different URL:s. If you trigger Jenkins builds, you may want each repo to have its own build job in Jenkins. The filtering functionality is highly configurable. Create a string with the variables and then a regexp that should match that string.<br>
+<img src="/content/images/2015/04/filter_branch_crop.png" alt="pull-request-notifier-for-stash-filter"></p>
+<h2 id="pollingjenkinswithgroovyscript">Polling Jenkins with Groovy script</h2>
+<p>Note that you should only do it this way if you cannot use the plugin described above! For example, uou may not have enaugh access to Stash to install plugins.</p>
+<p>Stash has really nice <a href="https://developer.atlassian.com/static/rest/stash/3.6.1/stash-rest.html">REST API:s</a>. I created a scheduled job in Jenkins that runs every 5 minutes. I implemented it in Groovy using the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Groovy+plugin">Groovy plugin</a>.</p>
+<ul>
+<li>Find all repos: <a href="http://stash/rest/api/1.0/projects/PROJECTS/repos/">http://stash/rest/api/1.0/projects/PROJECTS/repos/</a></li>
+<li>Find all pull requests in a repo: <a href="http://stash/rest/api/1.0/projects/PROJECTS/repos/%22+repo.slug+%22/pull-requests?base&amp;details&amp;filterText&amp;orderBy">http://stash/rest/api/1.0/projects/PROJECTS/repos/&quot;+repo.slug+&quot;/pull-requests?base&amp;details&amp;filterText&amp;orderBy</a></li>
+</ul>
+<pre><code>String summary = &quot;&quot;
+int newPullRequests = 0;
+File previousPullRequests = new File(&quot;/ci/lib/jenkins/workspace/Pull Request Poller/previousPullRequests.txt&quot;)
+
+String getJson(String addr) {
+ manager.listener.logger.println(&quot;Getting URL: &quot;+addr)
+ def authString = &quot;user:pass&quot;.getBytes().encodeBase64().toString()
+ java.net.URLConnection conn = addr.toURL().openConnection()
+ conn.setRequestProperty( &quot;Authorization&quot;, &quot;Basic ${authString}&quot; )
+ conn.connect()
+ def reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))
+ def stringBuilder = new StringBuilder()
+ String line = null
+ while ((line = reader.readLine()) != null) {
+  stringBuilder.append(line + &quot;\n&quot;)
+ }
+ String json = groovy.json.JsonOutput.prettyPrint(stringBuilder.toString())
+ manager.listener.logger.println(&quot;Got response:\n&quot;+json)
+ return json
+}
+
+new groovy.json.JsonSlurper().parseText(getJson(&quot;http://stash/rest/api/1.0/projects/PROJECTS/repos/&quot;)).values.each { repo -&gt;
+ manager.listener.logger.println(&quot;Repo: &quot;+repo.slug)
+
+ String prettyJSON = getJson(&quot;http://stash/rest/api/1.0/projects/PROJECTS/repos/&quot;+repo.slug+&quot;/pull-requests?base&amp;details&amp;filterText&amp;orderBy&quot;)
+ def jsonData = new groovy.json.JsonSlurper().parseText(prettyJSON);
+ jsonData.values.each { value -&gt;
+  String title = value.title
+  String from = value.fromRef.latestChangeset
+  String fromRepo = value.fromRef.repository.links.clone.find { it.name == &quot;ssh&quot; }.href
+  String to = value.toRef.latestChangeset
+  String toRepo = value.toRef.repository.links.clone.find { it.name == &quot;ssh&quot; }.href
+  String repositorySlug = repo.slug
+  String pullRequestId = value.id
+  String requestUrl =  &quot;http://stash/projects/PROJECTS/repos/&quot;+repositorySlug+&quot;/pull-requests/&quot;+pullRequestId+&quot;/overview&quot;
+
+  //Remember that this request has been triggered, and avoid triggering it again
+  String identifier = from+&quot; &quot;+to
+  if (previousPullRequests.text.contains(identifier)) {
+   manager.listener.logger.println(&quot;Ignoring: &quot;+identifier)
+   return;
+  }
+  previousPullRequests.append(identifier+&quot;\n&quot;)
+
+  //Trigger a jenkins job that will verify the pull request
+  String invokeBuildUrl = &quot;http://jenkins/job/Pull%20Request%20Builder/buildWithParameters?token=SECRET_CONFIGURED_IN_BUILD&amp;FROM=&quot;+from+&quot;&amp;TO=&quot;+to+&quot;&amp;FROMREPO=&quot;+fromRepo+&quot;&amp;TOREPO=&quot;+toRepo+&quot;&amp;REPOSITORY_SLUG=&quot;+repositorySlug+&quot;&amp;PULL_REQUEST_ID=&quot;+pullRequestId
+  manager.listener.logger.println(invokeBuildUrl)
+  new URL(invokeBuildUrl).getText()
+
+  summary += &quot;&lt;h1&gt;&quot;+title+&quot;&lt;/h1&gt;&lt;br&gt;&lt;a href='&quot;+requestUrl+&quot;'&gt;&quot;+requestUrl+&quot;&lt;/a&gt;&lt;br&gt;From: &quot;+jsonData.values[0].fromRef.id+&quot; (&quot;+from+&quot;) in &quot;+fromRepo+&quot;&lt;br&gt;To: &quot;+jsonData.values[0].toRef.id+&quot; (&quot;+to+&quot;) in &quot;+toRepo+&quot;&lt;br&gt;&lt;a href='&quot;+invokeBuildUrl+&quot;'&gt;&quot;+invokeBuildUrl+&quot;&lt;/a&gt;&lt;hr&gt;&quot;
+  newPullRequests++;
+ }
+}
+
+//Add some info to the build
+if (newPullRequests == 0) {
+ manager.createSummary(&quot;gear2.gif&quot;).appendText(&quot;&lt;h1&gt;No new pull requests found!&lt;/h1&gt;&quot; , false)
+} else {
+ manager.addShortText(&quot;+&quot;+newPullRequests, &quot;grey&quot;, &quot;white&quot;, &quot;0px&quot;, &quot;white&quot;)
+ manager.createSummary(&quot;gear2.gif&quot;).appendText(summary , false)
+}
+</code></pre>
+<h1 id="mergingandbuildingthepullrequest">Merging and building the pull request</h1>
+<p>I created a parameterized job to merge the pull request from source branch to target branch. It takes <em>FROM_HASH</em>, <em>FROM_REPO</em>, <em>TO_HASH</em>, <em>TO_REPO</em>, <em>REPOSITORY_SLUG</em> and <em>PULL_REQUEST_ID</em> as parameters.</p>
+<p>The job has a build step <em>execute shell</em> that does the actual verification.</p>
+<pre><code>git clone $TO_REPO
+cd *
+git reset --hard $TO_HASH
+git status
+git remote add from $FROM_REPO
+git fetch from
+git merge $FROM_HASH
+git --no-pager log --max-count=10 --graph --abbrev-commit
+
+#compile command here ...
+</code></pre>
+<p>The job uses the <a href="https://wiki.jenkins-ci.org/display/JENKINS/StashNotifier+Plugin">Stash Notifier Plugin</a> to record result in the pull request in Stash. Use the ${FROM_HASH} variable to get the build status reported correctly in the pull request in Stash.</p>
+<p>It adds a comment to the pull request, like this.</p>
+<pre><code>curl -D- -u user:pass -X POST -H &quot;Content-Type: application/json&quot;  --data &quot;{ \&quot;text\&quot;: \&quot;Looking good :) http://jenkins/job/Pull%20Request%20Builder/${BUILD_NUMBER}/\&quot; }&quot; http://stash/rest/api/1.0/projects/PROJECT/repos/$REPOSITORY_SLUG/pull-requests/$PULL_REQUEST_ID/comments
+</code></pre>
+<h1 id="staticcodeanalyzers">Static code analyzers</h1>
+<p>If you are using static code analyzers you may want to have a look at <a href="https://github.com/jenkinsci/jenkins-violation-comments-to-stash-plugin">Jenkins Violation Comments to Stash Plugin</a> for Jenkins.</p>
+<p>It is configured like this.</p>
+<p><img src="/content/images/2015/05/screenshot-config.png" alt="alt"></p>
+<p>And will comment the pull requests like this.</p>
+<p><img src="/content/images/2015/05/screenshot-stash.png" alt="alt"></p>
+
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/jenkins/">Jenkins</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/release-from-jenkins-by-pushing-git-tags/">Release from Jenkins by pushing Git tags</a></li>
+                            <li><a href="/jenkins-configuration-as-code-and-gitlab/">Jenkins Configuration as Code and GitLab</a></li>
+                            <li><a href="/jenkins-integration-on-steroids/">Jenkins Integration on Steroids</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/jenkins/">See all 9 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-stash tag-plugins tag-bitbucket-server-2 tag-continuous-integration tag-git">
+        <a class="post-card-image-link" href="/simple-stash-commit-checker/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/0722.sdt-atlassian-1.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/simple-stash-commit-checker/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Stash</span>
+                <h2 class="post-card-title">Simple Stash Commit Checker</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Update 160912: There is a new post here. I'm currently working with a customer that has around 30 comitters working on the same code base. We are using Git with Atlassian Stash. Reccently</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">2 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post no-image">
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/findfilm-se-netflix-from-a-to-z-and-more/">
+            <header class="post-card-header">
+                <h2 class="post-card-title">FindFilm.se -  Netflix from A to Z, and more &#x3D;)</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I grew tired of the way Netflix is categorizing movies. I wanted to browse them alphabetically. I also wanted to find the movies that were recently added to Netflix. So I created Findfilm.</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">1 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Building Atlassian Stash pull requests in Jenkins</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Building%20Atlassian%20Stash%20pull%20requests%20in%20Jenkins&amp;url=https://bjurr.com/building-atlassian-stash-pull-requests-in-jenkins/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/building-atlassian-stash-pull-requests-in-jenkins/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

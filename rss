@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss"><channel><title><![CDATA[Tomas Bjerre:s blog]]></title><description><![CDATA[My blog on things I find interesting.]]></description><link>https://bjurr.com/</link><image><url>https://bjurr.com/favicon.png</url><title>Tomas Bjerre:s blog</title><link>https://bjurr.com/</link></image><generator>Ghost 2.11</generator><lastBuildDate>Sat, 15 Jan 2022 10:11:01 GMT</lastBuildDate><atom:link href="https://bjurr.com/rss" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Estimate story points or time units?]]></title><description><![CDATA[<p>Should you estimate tasks with story points or using time units? Here are my thoughts.</p>
+<p>When working in agile teams, typically with scrum, I am use to <strong>estimating stories</strong>. I commit to a sprint and I am confident my team will complete the stories based on those estimations and our</p>]]></description><link>https://bjurr.com/estimate-story-points-or-time-units/</link><guid isPermaLink="false">5ebf9ce1a1efec04bfead68a</guid><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sat, 16 May 2020 08:19:19 GMT</pubDate><content:encoded><![CDATA[<p>Should you estimate tasks with story points or using time units? Here are my thoughts.</p>
+<p>When working in agile teams, typically with scrum, I am use to <strong>estimating stories</strong>. I commit to a sprint and I am confident my team will complete the stories based on those estimations and our <strong>velocity</strong>. The teams <strong>velocity</strong> is measured, not each individual within the team.</p>
+<p>So far so good, but my experience is that there are 2 different opinions on how to do this.</p>
+<h1 id="storypoints">Story points</h1>
+<p>When using <strong>story points</strong>:</p>
+<ul>
+<li>The <strong>complexity</strong> of stories is estimated.</li>
+<li>Velocity is measured as average <strong>story points completed per sprint</strong>.</li>
+</ul>
+<p>I often experience that we don't agree on what we mean with complexity. I would argue that this only works if you assume everyone has all the knowledge needed. It is just as complex regardless of who will work on it and what knowledge they might have.</p>
+<h1 id="timeunits">Time units</h1>
+<p>When using <strong>time units</strong>:</p>
+<ul>
+<li>The <strong>amount of time</strong> needed to complete stories is estimated.</li>
+<li>Velocity is measured as average <strong>estimated time units completed per sprint</strong>.</li>
+</ul>
+<p>Each member guesses how long time they would need and we take the average of that as an estimate.</p>
+<p>I often experience that we optimize the sprint by talking about who will implement what stories during the sprint. And the time units are lowered as we estimate how much time those individuals will need. The &quot;team&quot; becomes more a of a &quot;group of people&quot;, not a team. Knowledge is not spread within the team.</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>No matter which alternative you pick, you can never tell how long time it will take for one member of the team to complete one story. We are all different with different knowledge and specialities. We don't measure velocity per member of the team, we measure per team.</p>
+<p><strong>I prefer story points</strong> because:</p>
+<ul>
+<li>It is clear that we only talk about time units on a team level, not on member level. We don't know how much time will be needed for one individual to complete it.</li>
+<li>The time needed to complete an individual story will always depend on who is doing it, the complexity will not!</li>
+<li>Stories can be estimated and later moved to another team, without need of re-estimating it.</li>
+</ul>
+]]></content:encoded></item><item><title><![CDATA[Using boilerplate, or template, projects without code duplication]]></title><description><![CDATA[A popular way of working seems to be creating template, or boilerplate, projects. Problem is, while you maintain the template project, how do you spread those improvements to the 100+ repositories that once copied the template!?]]></description><link>https://bjurr.com/using-react-boilerplate-without-code-duplication/</link><guid isPermaLink="false">5eb4593b359edc04bc3cf042</guid><category><![CDATA[react]]></category><category><![CDATA[boilerplate]]></category><category><![CDATA[template]]></category><category><![CDATA[frontend]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Thu, 07 May 2020 19:00:33 GMT</pubDate><content:encoded><![CDATA[<p>I started fiddling with a tool to avoid code duplication in code repositories. I made a POC with react-boilerplate so that I can use it in many repositories without duplicating code!</p>
+<h1 id="problem">Problem</h1>
+<p>A popular way of working seems to be creating template, or boilerplate, projects. Problem is, while you maintain the template project, how do you spread those improvements to the 100+ repositories that once copied the template!?</p>
+<p>I spent some time thinking about this and came up with a solution =)</p>
+<h1 id="solution">Solution</h1>
+<p>I took the <code>react-boilerplate</code> and created a <a href="https://github.com/tomasbjerre/dictator-react-boilerplate">dictator</a>.</p>
+<p>The <a href="https://github.com/tomasbjerre/dictator-react-boilerplate">dictator</a> dictates files that should be <a href="https://github.com/tomasbjerre/dictator-react-boilerplate/blob/master/dictatables/static-files/.dictatable-config.json">copied to a target</a>.</p>
+<pre><code class="language-json">{
+  &quot;message&quot;: &quot;Copy react-boilerplate&quot;,
+  &quot;actions&quot;: [
+    {
+      &quot;copyFrom&quot;: &quot;react-boilerplate&quot;,
+      &quot;target&quot;: &quot;.&quot;
+    }
+  ]
+}
+</code></pre>
+<p>I created an <a href="https://github.com/tomasbjerre/dictator-react-boilerplate-example">example of an application</a> using this dictator.</p>
+<pre><code>...
+  &quot;scripts&quot;: {
+    &quot;prepare&quot;: &quot;dictator-react-boilerplate&quot;,
+...
+  &quot;devDependencies&quot;: {
+    &quot;dictator-react-boilerplate&quot;: &quot;0.0.2&quot;,
+...
+</code></pre>
+<p>The example application can choose not to be dictated on <a href="https://github.com/tomasbjerre/dictator-react-boilerplate-example/blob/master/.dictatorconfig.json">some parts</a>.</p>
+<pre><code class="language-json">{
+    &quot;ignore&quot;: [
+      &quot;/README.md&quot;,
+      &quot;/.github&quot;,
+      &quot;/app&quot;,
+      &quot;/package.json&quot;,
+      &quot;/package-lock.json&quot;,
+      &quot;/Changelod.md&quot;
+    ]
+  }
+</code></pre>
+]]></content:encoded></item><item><title><![CDATA[Release from Jenkins by pushing Git tags]]></title><description><![CDATA[<p>This post will explain how to setup a single job in Jenkins that performs releases when tags are pushed to any number of repositories. This means you can:</p><ul><li>Let developers perform releases <strong>without admin permissions in Jenkins</strong>.</li><li>Let Jenkins build releases <strong>without giving Jenkins permission to push to Git</strong>.</li><li>No</li></ul>]]></description><link>https://bjurr.com/release-from-jenkins-by-pushing-git-tags/</link><guid isPermaLink="false">5d5988255a223c04f054fad7</guid><category><![CDATA[Jenkins]]></category><category><![CDATA[Git]]></category><category><![CDATA[Bitbucket Server]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sun, 18 Aug 2019 17:52:08 GMT</pubDate><media:content url="https://bjurr.com/content/images/2019/08/superhero.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2019/08/superhero.png" alt="Release from Jenkins by pushing Git tags"><p>This post will explain how to setup a single job in Jenkins that performs releases when tags are pushed to any number of repositories. This means you can:</p><ul><li>Let developers perform releases <strong>without admin permissions in Jenkins</strong>.</li><li>Let Jenkins build releases <strong>without giving Jenkins permission to push to Git</strong>.</li><li>No Jenkinsfiles in the repositories, <strong>eliminate code duplication</strong>.</li><li>Trace whoever made the release by looking at the <strong>Git log</strong>.</li></ul><p>The code used in the post is here: <a href="https://github.com/tomasbjerre/bitbucket-server-jenkins-release-tags">https://github.com/tomasbjerre/bitbucket-server-jenkins-release-tags</a></p><h1 id="workflow">Workflow</h1><p>I implement a flow like this:</p><ul><li>The user pushes a tag to Git<br><em>git tag 1.0<br>git push -u origin 1.0</em></li><li>Git (in my case Bitbucket Server) invokes Jenkins with a webhook</li><li>Jenkins will clone repository, checkout the commit, perform the release and email the user.</li></ul><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/08/bbs-jenkins-tag-flow.png" class="kg-image" alt="Release from Jenkins by pushing Git tags"></figure><h1 id="implementation">Implementation</h1><p>A single pipeline is created in Jenkins, completely generic and can handle any number of Git repositories. The webhook needs to be added to the Git repositories that should use the job.</p><h2 id="jenkins">Jenkins</h2><p>A Jenkins pipeline job is created. Triggered by <a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin">Generic Webhook Trigger</a>. The pipeline can be found here: <a href="https://github.com/tomasbjerre/bitbucket-server-jenkins-release-tags/blob/master/Jenkinsfile">https://github.com/tomasbjerre/bitbucket-server-jenkins-release-tags/blob/master/Jenkinsfile</a></p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/08/stages.png" class="kg-image" alt="Release from Jenkins by pushing Git tags"><figcaption>The stages.</figcaption></figure><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/08/build-info.png" class="kg-image" alt="Release from Jenkins by pushing Git tags"><figcaption>A triggered build.</figcaption></figure><p>The build log may look like this: <a href="https://github.com/tomasbjerre/bitbucket-server-jenkins-release-tags/blob/master/build-log-sample.txt">https://github.com/tomasbjerre/bitbucket-server-jenkins-release-tags/blob/master/build-log-sample.txt</a></p><h2 id="bitbucket-server">Bitbucket Server</h2><p>This workflow is turned on for any repository by configuring the repository with a webhook that triggers on push events. In Bitbucket Server, this includes tag events.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/08/bbs-webhook-push.png" class="kg-image" alt="Release from Jenkins by pushing Git tags"></figure><p>When fiddling with it you may want to check the event log.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/08/bbs-webhook-eventlog.png" class="kg-image" alt="Release from Jenkins by pushing Git tags"></figure><p>It may have some useful info in the response.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/08/bbs-webhook-response.png" class="kg-image" alt="Release from Jenkins by pushing Git tags"></figure><h1 id="youtube">Youtube</h1><p>Here is a Youtube clip showing this flow:</p><figure class="kg-card kg-embed-card"><iframe width="480" height="270" src="https://www.youtube.com/embed/8mrJNkofxq4?feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></figure>]]></content:encoded></item><item><title><![CDATA[Dependents of Maven artifacts]]></title><description><![CDATA[<p>Finding out dependencies of an artifact is easy, but what about dependents? Who is depending on the artifact? That is a common problem when working with Java. The answer is needed in order to, among other things, automate build flows. This is one way of doing it that will work</p>]]></description><link>https://bjurr.com/dependents-of-maven-artifacts/</link><guid isPermaLink="false">5cd9a5ee52156f04cb9dc69e</guid><category><![CDATA[maven]]></category><category><![CDATA[Gradle]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Mon, 13 May 2019 17:46:36 GMT</pubDate><media:content url="https://bjurr.com/content/images/2019/05/pdaw.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2019/05/pdaw.png" alt="Dependents of Maven artifacts"><p>Finding out dependencies of an artifact is easy, but what about dependents? Who is depending on the artifact? That is a common problem when working with Java. The answer is needed in order to, among other things, automate build flows. This is one way of doing it that will work with anything (Maven, Gradle, ...) that is published to a Maven repository like Nexus or Bintray.</p><h1 id="overview">Overview</h1><p>I developed 3 tools:</p><ul><li>Pom Downloader<br><a href="https://github.com/tomasbjerre/pom-downloader">https://github.com/tomasbjerre/pom-downloader</a><br>Given a <em>groupId</em>, it will download all <em>pom</em>-files withing that group.</li><li>Pom Dependency Analyzer<br><a href="https://github.com/tomasbjerre/pom-dependency-analyzer">https://github.com/tomasbjerre/pom-dependency-analyzer</a><br>Will analyze a <em>pom</em>-file and output the effective <em>dependencies</em>, <em>groupId</em>, <em>artifactId</em>, <em>version</em>. Also update all <em>dependencies</em> to have its <em>dependents</em> refer to the <em>dependency</em>.</li><li>Pom Dependency Analyzer Web<br><a href="https://github.com/tomasbjerre/pom-dependency-analyzer-web">https://github.com/tomasbjerre/pom-dependency-analyzer-web</a><br>Will transform the output of Pom Dependency Analyzer to a static REST API that can be deployed on a static web server, like Github pages: <a href="https://tomasbjerre.github.io/pom-dependency-analyzer-web/">https://tomasbjerre.github.io/pom-dependency-analyzer-web/</a></li></ul><h1 id="usage">Usage</h1><p>Check the <em>README:s</em> of each tool to get the accurate features and commands. I see 2 main use cases that I wanted to solve:</p><ul>
+<li>
+<p>Have a browsable website, that is automatically updated, that shows:</p>
+<ul>
+<li>What artifacts are being produced within an organization.</li>
+<li>Their effective dependencies, including transitives.</li>
+<li>Their dependents, artifacts that have them as dependency.</li>
+</ul>
+</li>
+<li>
+<p>Have, instantly updated, lists of dependents of each artifact. So that:</p>
+<ul>
+<li>Whenever an artifact is built, you can know what other artifacts needs to be verified against the newly changed artifact.</li>
+<li>Where, probably Git reposiroties, to find these dependent artifacts.</li>
+</ul>
+</li>
+</ul>
+<p>The first use case is solved by:</p><ul><li>Running Pom Downloader in a scheduled job</li><li>Running Pom Dependency Analyzer on each pom downloaded from first step</li><li>Running Pom Dependency Analyzer Web on the output of second step</li></ul><p>The second use case is solved by:</p><ul><li>Running Pom Dependency Analyzer on each newly produced artifact, snapshot-jobs and release-jobs.</li></ul><p>I'm storing output of Pom Dependency Analyzer in a shared folder but you might want to store it in its own Git repository.</p><h1 id="example">Example</h1><p>I have my example running here: <a href="https://tomasbjerre.github.io/pom-dependency-analyzer-web/#/groupId/se.bjurr.violations/artifactId/violation-comments-lib/version/1.95">https://tomasbjerre.github.io/pom-dependency-analyzer-web/</a><br>So that you can view dependents of a specific version like this: <a href="https://tomasbjerre.github.io/pom-dependency-analyzer-web/#/groupId/se.bjurr.violations/artifactId/violation-comments-lib/version/1.95">https://tomasbjerre.github.io/pom-dependency-analyzer-web/#/groupId/se.bjurr.violations/artifactId/violation-comments-lib/version/1.95</a></p>]]></content:encoded></item><item><title><![CDATA[Automatic stubs with Wiremock and JAX-RS]]></title><description><![CDATA[<p>I often see <em>mock</em>, or <em>stub</em>, servers being configured in frontend projects. I see hard coded <em>JSON</em> files that are very likely to not match the true responses of the actual API. Here is how I automate creation of a type safe, reliable, stub server in a runnable, self contained,</p>]]></description><link>https://bjurr.com/automatic-stubs-with-wiremock/</link><guid isPermaLink="false">5cc35015bbdcf706bbdbc74f</guid><category><![CDATA[wiremock]]></category><category><![CDATA[jaxrs]]></category><category><![CDATA[mock]]></category><category><![CDATA[stub]]></category><category><![CDATA[Java]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Fri, 26 Apr 2019 18:40:58 GMT</pubDate><media:content url="https://bjurr.com/content/images/2019/04/wm.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2019/04/wm.png" alt="Automatic stubs with Wiremock and JAX-RS"><p>I often see <em>mock</em>, or <em>stub</em>, servers being configured in frontend projects. I see hard coded <em>JSON</em> files that are very likely to not match the true responses of the actual API. Here is how I automate creation of a type safe, reliable, stub server in a runnable, self contained, <em>JAR</em>. Packaged whenever the <em>API</em> is packaged.</p><h1 id="implementation">Implementation</h1><p>A fully working example is implemented here, with Maven:<br><a href="https://github.com/tomasbjerre/wiremock-jaxrs-example">https://github.com/tomasbjerre/wiremock-jaxrs-example</a></p><p>I have a multi module Maven setup with these modules:</p><ul><li><code>module</code> - Parent pom.</li><li><code>module-api</code> - JAX-RS annotated API. Very slim API jar.</li><li><code>module-api-mock</code> - Runnable mock-server based on <a href="https://github.com/tomasbjerre/wiremock-jaxrs">Wiremock JAX-RS</a>.</li></ul><p>In the <em>module-api-mock</em> I create a test case that produces the configuration of the stub. I use a test case just because that is an easy way to get some code to run during the build.</p><p>I use <a href="https://github.com/tomasbjerre/wiremock-jaxrs">Wiremock JAX-RS</a> to automatically configure the stub. By looking at how may <em>JAX-RS</em> resource is annotated.</p><p>My resource looks something like this:</p><pre><code class="language-java">@Path(&quot;/&quot;)
+public interface ExampleResource {
+  @GET
+  @Path(&quot;/get&quot;)
+  @Produces(MediaType.APPLICATION_JSON)
+  public ItemDTO getItem(@QueryParam(&quot;filter1&quot;) String filter1);
+
+  @POST
+  @Path(&quot;/create&quot;)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public void createItem(ItemDTO item);
+}
+</code></pre>
+<p>And I configure the stub something like this:</p><pre><code class="language-java">stubFor(
+   invocation(ExampleResource.class, (r) -&gt; r.getItem(&quot;abc&quot;)) //
+      .willReturn(aResponse().withStatus(SC_NOT_FOUND)));
+
+for (final ItemDTO itemDto : MockFactory.getAllItems()) {
+  stubFor(
+     invocation(ExampleResource.class, (r) -&gt; r.getItem(itemDto.getAttr1())) 
+        .willReturn(aResponse().withStatus(SC_ACCEPTED), itemDto));
+
+  stubFor(
+     invocation(ExampleResource.class, (r) -&gt; r.createItem(itemDto)) //
+       .willReturn(aResponse().withStatus(SC_ACCEPTED)));
+}
+</code></pre>
+<p>In this example the <em>invocation(...)</em> comes from <a href="https://github.com/tomasbjerre/wiremock-jaxrs">Wiremock JAX-RS</a>.</p><p>This will make <a href="http://wiremock.org/docs/stubbing/">Wiremock produce <em>JSON</em></a>. I then package Wiremock-standalone together with this <em>JSON</em> into a self contained <em>JAR</em>. This <em>JAR</em> can then be run from command line to get a reliable (type safe) mock server to use for other development, like frontend.</p><p>Something like this will give me a reliable server responding with correct headers and datastructures:</p><p><em>java -jar mymodule-api-mock.jar</em></p><h1 id="advantages">Advantages</h1><p>The stubs are created with the same language, Java, as the service is created in. Convenient if you are a Java developer. While still the result is <em>JSON</em>, convenient for frontend developers.</p><p>If the <em>API</em> changes, the stub will automatically change. The stub will always match the <em>API</em>. Same types and same headers (accept, content type).</p><h1 id="what-about-mockito">What about Mockito?</h1><p>You may also do this instead of something like Mockito to in the test cases.</p><ul><li>Mockito will not test that datastructures serialize and deserialize.</li><li>Will not test that you are using annotations in a "sane" way.</li></ul>]]></content:encoded></item><item><title><![CDATA[Jenkins Configuration as Code and GitLab]]></title><description><![CDATA[I used Jenkins Configuration as Code and GitLab to demonstrate how Jenkins and its configuration (jobs, build process and global configuration) can be version controlled and fully automated.]]></description><link>https://bjurr.com/jenkins-configuration-as-code-and-gitlab/</link><guid isPermaLink="false">5c5e7a20d32e6b08b8dfd508</guid><category><![CDATA[Jenkins]]></category><category><![CDATA[pipeline]]></category><category><![CDATA[GitLab]]></category><category><![CDATA[continuous-integration]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sat, 09 Feb 2019 07:07:58 GMT</pubDate><media:content url="https://bjurr.com/content/images/2019/02/superhero.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2019/02/superhero.png" alt="Jenkins Configuration as Code and GitLab"><p>I used <a href="https://jenkins.io/projects/jcasc/">Jenkins Configuration as Code</a>, <em>JCasC</em>, and <a href="https://docs.gitlab.com/ce/">GitLab</a> to demonstrate how Jenkins and its configuration (<a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">jobs</a>, <a href="https://jenkins.io/doc/book/pipeline/">build process</a> and <a href="https://jenkins.io/projects/jcasc/">global configuration</a>) can be version controlled and fully automated. I also integrated with <a href="https://docs.gitlab.com/ce/">GitLab</a> to show how <a href="https://docs.gitlab.com/ce/user/project/integrations/webhooks.html">webhooks</a> configuration can be automated to trigger the jobs in Jenkins.</p><p><strong>TL;DR:</strong> Here is the code: <a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></p><h2 id="the-problem">The Problem</h2><p>When I started with this I was at a client who had several large projects. Each project with several developers working full time. They all developed different systems. They all shared one Jenkins installation with a vast amount of jobs. Some of the problems with this setup are:</p><ul><li>You don't know how an <strong>update of a plugin</strong> affects all the jobs.</li><li>Hard to keep track of what <strong>plugins are actually needed</strong>.</li><li>Hard to keep track of <strong>what jobs are still needed</strong>. Git repositories changes name, gets removed, gets abandoned...</li><li>Hard to <strong>support developers</strong> because the way the different projects are using Jenkins <strong>diverge</strong>.</li><li>Build scripts are <strong>deployed in production for everyone</strong> at the same time.</li><li>Blocks innovation because you <strong>will not have confidence</strong> enough to refactor build scripts. You will instead just make smallest possible changes to global scripts and pray that it works for everyone.</li><li>Cannot, easily, <strong>revert changes</strong> made to the Jenkins installation.</li><li>Cannot, easily, <strong>work locally</strong> with the Jenkins installation. Cannot work in feature branches, just like you would in any other application repository.</li></ul><h2 id="the-solution">The Solution</h2><p>My solution is to express the entire Jenkins setup with scripts. Scripts that are version controlled in a Git repository. Now that <a href="https://jenkins.io/projects/jcasc/">JCasC</a> is released we have all parts need. </p><ul><li>I have a <em>master </em>branch in Git that represents the <em>bleeding edge</em> setup with the latest features.</li><li>Each project have their own branch in Git, pointing to their setup.</li></ul><p>Each project have their own installation of Jenkins. They can decide for themselves when they want to follow the road map and get the latest features. The road map is the path, a bunch of commits in Git, between the projects current branch and the <em>master</em> branch.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/02/jenkins-sandbox-master.png" class="kg-image" alt="Jenkins Configuration as Code and GitLab"><figcaption>A master branch with bleeding edge features</figcaption></figure><p>At some point in time a snapshot of the current state, of the Jenkins configuration Git repository, may look like this.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2019/02/jenkins-sandbox-state.png" class="kg-image" alt="Jenkins Configuration as Code and GitLab"><figcaption>Different projects can use different parents of the bleeding edge master</figcaption></figure><p>Here we see that:</p><ul><li>The <strong>Master</strong> configuration points to Git commit <strong>G</strong>. Which means <strong>G</strong> is the bleeding edge with the latest greatest features.</li><li><strong>Project E</strong> is an early adopter and is only one commit behind the <strong>Master</strong>.</li><li><strong>Project D</strong> is far behind.</li></ul><p>In this snapshot, perhaps, the people in <strong>Project D</strong> may not have much interest in CI/CD. They just want it to do its thing while they focus on their application code. The people in <strong>Project E</strong> seems to be more enthusiastic and wants the latest features.</p><p>This solution has a bunch of advantages:</p><ul><li>It <strong>encourages innovation</strong>. Anyone, in any project, can create their own feature branch in the Git repository to try any idea they might have. They can, easily, setup the entire Jenkins installation locally to fiddle with it. Develop scripts and try ideas. Even push the feature branch to a remote and suggest features to be included in the <strong>Master</strong>.</li><li>It <strong>reduces time spent on support</strong>. When the way the different projects use Jenkins does not diverge, their can be documentation that all projects can use. It also means that if <strong>Project C</strong> has a problem, they can talk to any member of any of the other projects. They don't necessarily need to talk to a member of the <strong>Master</strong> project.</li><li>Gives <strong>self confidence to refactor</strong> scripts. Ideas can be tested locally without having to be deployed in a shared Jenkins instance.</li><li>Allows <strong>revert of failed upgrades</strong>. If a project upgrades and something goes wrong, you simply revert the change in Git and you will be back to where you were before the upgrade.</li><li><strong>Nice and tidy structuring of jobs</strong>. You can organize the Jenkins jobs in folders to create a structure that maps to the structure you have in your Git service. Like in GitLab you have namespaces and I have a Jenkins folder for each namespace.</li></ul><figure class="kg-card kg-embed-card"><iframe width="480" height="270" src="https://www.youtube.com/embed/3R39J-6SjV8?feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></figure><h2 id="implementation">Implementation</h2><p>The code, the Git repository containing the entire Jenkins setup, is available here:</p><ul><li><a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></li></ul>]]></content:encoded></item><item><title><![CDATA[Moving to IntelliJ IDEA from Eclipse]]></title><description><![CDATA[<p>Being a long time <strong>Eclipse</strong> user I recently started using <strong>IntelliJ</strong>. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.</p><h1 id="comparison">Comparison</h1><p>Here are some of the topics that I thought were most interesting when doing the switch.</p><h2 id="free-and-open-source">Free and</h2>]]></description><link>https://bjurr.com/moving-to-intellij-idea-from-eclipse/</link><guid isPermaLink="false">5b858416d1c4a4085e025db0</guid><category><![CDATA[intellij]]></category><category><![CDATA[Java]]></category><category><![CDATA[eclipse]]></category><category><![CDATA[ide]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Tue, 28 Aug 2018 17:40:40 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/08/intellij.jpeg" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/08/intellij.jpeg" alt="Moving to IntelliJ IDEA from Eclipse"><p>Being a long time <strong>Eclipse</strong> user I recently started using <strong>IntelliJ</strong>. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.</p><h1 id="comparison">Comparison</h1><p>Here are some of the topics that I thought were most interesting when doing the switch.</p><h2 id="free-and-open-source">Free and Open Source</h2><p>I don't want to depend on software that is not free and open source. That, to me, feels like a trap and something I want to avoid. </p><p><strong>Eclipse</strong> is <a href="https://www.eclipse.org/downloads/">free</a> and <a href="https://github.com/eclipse">open source</a>.</p><p><strong>IntelliJ</strong> has a <a href="https://www.jetbrains.com/idea/download/">community edition</a> that is also free and <a href="https://github.com/JetBrains/intellij-community">open source</a>. This is the one I use.</p><p>This is totally fine for me. <em>Less is more</em>!</p><h2 id="synchronize-settings">Synchronize Settings</h2><p>I want to automatically have my IDE setup exactly how I want it and synchronize that to all my installations. Avoiding the time consuming task of searching for settings and clicking checkboxes.</p><p>In<strong> Eclipse</strong> I use Workspace Mechanics. The mechanics files are put under version control so that all developers of a project will have changes applied immediately when someone changes the settings.</p><p>In<strong> IntelliJ</strong> this is built in. In the menu, <em>File -&gt; Settings Repository</em> you can add any git-repository. I just created a new <a href="https://github.com/tomasbjerre/intelij-settings">repository on GitHub</a> and is now using that clone URL. To publish settings you do <em>File -&gt; Settings Repository</em> and click <em>Merge</em>.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2018/08/intellij-settings.png" class="kg-image" alt="Moving to IntelliJ IDEA from Eclipse"><figcaption><a>git@github.com</a>:tomasbjerre/intelij-settings.git</figcaption></figure><p>I have seen that some settings are not synchronized when using <strong>IntelliJ</strong>. I really miss <em>automatically download sources</em> and <em>documentation</em> and most annoyingly is the option to <em>optimize imports on the fly</em>.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2018/08/intellij-maven-download-sources.png" class="kg-image" alt="Moving to IntelliJ IDEA from Eclipse"><figcaption>Intellij - Download sources and documentation</figcaption></figure><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2018/08/intellij-optimize-imports-1.png" class="kg-image" alt="Moving to IntelliJ IDEA from Eclipse"><figcaption>Intellij - Optimize imports on the fly</figcaption></figure><h2 id="opening-several-projects-in-same-window">Opening Several Projects In Same Window</h2><p>In <strong>Eclipse</strong> you would create a workspace and import projects in that workspace.</p><p>In <strong>IntelliJ</strong> you create a project and add modules to it. A module can be a Maven, or Gradle, project. You do:</p><ul><li><em>File -&gt; New -&gt; Project ...</em></li><li><em>Empty project</em></li><li>Name it anything you like</li><li>Finnish</li></ul><p>Now to add a Gradle project to it, you do:</p><ul><li>File -&gt; New -&gt; Module From Existing Sources...</li><li>Select the <em>build.gradle</em> file. If it were Maven you would select the <em>pom.xml</em> file</li></ul><h2 id="maintaining-a-code-standard">Maintaining a Code Standard</h2><p>In<strong> Eclipse</strong> you can setup save actions that will apply the code standard whenever a file is saved.</p><p>In<strong> IntelliJ</strong> I have not found any way of enforcing a code standard. It does a good job on understanding and adhering to how the current file already is formatted.</p><p>I always use an external tool for coder formatting, if I can find one. So that developers can use any editor. But sometimes I am not the maintainer of the project or other developers don't agree with me about doing it that way.</p><h2 id="automatically-boost-code-quality">Automatically Boost Code Quality</h2><p>In <strong>Eclipse</strong> I would setup save actions to automatically do things like:</p><ul><li>Remove unused variables</li><li>Organize imports, sorting and removing unused imports</li><li>Adding final keyword to immutable attributes and variables</li><li>Remove trailing white space</li></ul><p>In <strong>IntelliJ</strong> you can find these settings by simply searching in the settings menu (<em>File -&gt; Settings</em>).</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2018/08/intellij-imports.png" class="kg-image" alt="Moving to IntelliJ IDEA from Eclipse"><figcaption>IntelliJ - Settings search</figcaption></figure><p>This will organize the imports when you are working with a file. You can also batch this by marking a folder in the menu and press <strong>CTRL-ALT-O</strong>.</p><figure class="kg-card kg-image-card"><img src="https://bjurr.com/content/images/2018/08/intellij-imports-folder.png" class="kg-image" alt="Moving to IntelliJ IDEA from Eclipse"><figcaption>IntelliJ - Batch optimize imports</figcaption></figure><h1 id="compilationerrors">Compilation errors</h1>
+<p>In <strong>Eclipse</strong> I let <strong>Eclipse</strong> compile the code whenever I change anything. I immedely get clear feedback if any code does not compile.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/eclipse-compilation-error.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<p>I struggle with this in <strong>IntelliJ</strong>. It does not tell me about code that does not compile.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/intellij-compilation-error-not.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<p>If I manually browse to a file that I know does not compile, and open it, <strong>IntelliJ</strong> will tell me it does not compile.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/intellij-compilation-error.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<p>This is annoying as I keep getting compilation errors when building outside of <strong>IntelliJ</strong> which slows me down.</p>
+<h1 id="revealfileinprojectview">Reveal file in project view</h1>
+<p>In <strong>Eclipse</strong> I can reveal whatever file I open in the project view to the right.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/eclipse-reveal-menu.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<p>It can be done in <strong>Intellij</strong> also.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/intellij-revel-menu.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<h1 id="showprojectsandtheirparts">Show projects and their parts</h1>
+<p><strong>Eclipse</strong> does a really good job showing me projects and their parts. The project, source-folders, packages and files.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/eclipse-parts.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<p>In <strong>IntelliJ</strong> I found <em>flattern packages</em>.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/intellij-flattern-packages.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<p>But it is not as clear as with <strong>Eclipse</strong>.</p>
+<p><img src="https://bjurr.com/content/images/2020/12/intellij-flatterned.png" alt="Moving to IntelliJ IDEA from Eclipse"></p>
+<h1 id="conclusions">Conclusions</h1><p>I am missing some features in <strong>IntelliJ</strong> regarding automatically correcting things in the code. But that is easily solved with Maven or Gradle. I wrote about that <a href="https://bjurr.com/java-code-formatting-with-google-java-format/">here</a>.</p>]]></content:encoded></item><item><title><![CDATA[Yet Another Kotlin VS Java Comparison]]></title><description><![CDATA[<p>I recently started developing an application with Kotlin. I found myself constantly wondering exactly what effect the Kotlin features have on the actual compiled classes. I was able to automatically generate the answers I needed.</p>
+<p>First of all, my solution is <a href="https://github.com/tomasbjerre/yet-another-kotlin-vs-java-comparison">here on GitHub</a>.</p>
+<p>What I do is:</p>
+<ol>
+<li>Write Kotlin</li></ol>]]></description><link>https://bjurr.com/yet-another-kotlin-vs-java-comparison/</link><guid isPermaLink="false">5b7be89c06392206949fa8a2</guid><category><![CDATA[kotlin]]></category><category><![CDATA[Java]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Tue, 21 Aug 2018 10:36:07 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/08/kotlin_250x250.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/08/kotlin_250x250.png" alt="Yet Another Kotlin VS Java Comparison"><p>I recently started developing an application with Kotlin. I found myself constantly wondering exactly what effect the Kotlin features have on the actual compiled classes. I was able to automatically generate the answers I needed.</p>
+<p>First of all, my solution is <a href="https://github.com/tomasbjerre/yet-another-kotlin-vs-java-comparison">here on GitHub</a>.</p>
+<p>What I do is:</p>
+<ol>
+<li>Write Kotlin code</li>
+<li>Compile the Kotlin code</li>
+<li>De-compile the resulting classes to Java code</li>
+<li>Gather the original Kotlin and resulting Java code</li>
+<li>Render markdown where I present this in a nice and tidy way</li>
+</ol>
+<p>The input is only Kotlin and the output is a report telling me what I want to know.</p>
+<p>Feel free to <a href="https://github.com/tomasbjerre/yet-another-kotlin-vs-java-comparison">clone the repo</a> and experiment yourself. I happily accept pull requests.</p>
+]]></content:encoded></item><item><title><![CDATA[Jenkins Integration on Steroids]]></title><description><![CDATA[<p>Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some <em>GET</em> parameters. <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> aims at simplifying triggering of jobs from complex <em>JSON</em>/<em>XML</em> webhook structures.</p>
+<p>I got the idea while working on the GitLab plugin. I <a href="https://github.com/jenkinsci/gitlab-plugin/pull/510">just needed</a></p>]]></description><link>https://bjurr.com/jenkins-integration-on-steroids/</link><guid isPermaLink="false">5ac3be89b907cf054a31895e</guid><category><![CDATA[Jenkins]]></category><category><![CDATA[pipeline]]></category><category><![CDATA[continuous-integration]]></category><category><![CDATA[Git]]></category><category><![CDATA[tools]]></category><category><![CDATA[GitLab]]></category><category><![CDATA[GitHub]]></category><category><![CDATA[Bitbucket Server]]></category><category><![CDATA[Stash]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Tue, 03 Apr 2018 17:51:44 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/04/superhero.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/04/superhero.png" alt="Jenkins Integration on Steroids"><p>Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some <em>GET</em> parameters. <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> aims at simplifying triggering of jobs from complex <em>JSON</em>/<em>XML</em> webhook structures.</p>
+<p>I got the idea while working on the GitLab plugin. I <a href="https://github.com/jenkinsci/gitlab-plugin/pull/510">just needed a simple integer</a> value from the GitLab webhook. After I opened <a href="https://github.com/jenkinsci/gitlab-plugin/pull/510">the PR</a>, it took 4+ months before it was merged and later released. Such a simple thing should not require that level of effort. But it is, and it is like that in other trigger plugins as well!</p>
+<p>The idea with <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> is very simple.</p>
+<ol>
+<li>Post content is received.</li>
+<li>Values are extracted from the received post content, using <a href="https://github.com/json-path/JsonPath">JSONPath</a> or <a href="https://www.w3schools.com/xml/xpath_intro.asp">XPath</a>. And are contributed to the build with the configured variable names.</li>
+<li><a href="https://jex.im/regulex/">Regular expression</a> is used to match the patterns that should trigger a build.</li>
+</ol>
+<p>The webhooks provided by different services are often well documented. In contrast to all the different Jenkins plugins that consume them. That shows another advantage of using <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a>. You will be able to understand what you are doing. The alternative is to spend many frustrating hours with a bunch of very complex plugins.</p>
+<p>I think most Jenkins users just wants a way to consume a webhook. <a href="https://plugins.jenkins.io/generic-webhook-trigger">This plugin</a> enables that and lets the users implement any use cases themselves. I think that is the best way to do it now that we have pipelines. Before pipelines there was a bigger need for complex plugins.</p>
+<h2 id="simpleusecase">Simple use case</h2>
+<p>Let's say we have a Git repository. It has some files in it, structured something like this:</p>
+<pre><code>src/main/java/...
+src/test/java/...
+src/main/resources/sql/...
+</code></pre>
+<h3 id="requirements">Requirements</h3>
+<ul>
+<li>If the files in <code>src/main/resources/sql</code> is changed, then we want to run the SQL in a Docker to verify them. If these files are not changed, then we don't want to verify them. Perhaps it is a time consuming task and we want to avoid it.</li>
+<li>We are not allowed to use polling. We want instant builds and cannot have a large amount of Jenkins jobs polling our Git service every minute.</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<p>First step would be to setup the webhook in GitHub and point it to the running Jenkins instance.</p>
+<ul>
+<li>Go to the webhooks page: <a href="https://github.com/tomasbjerre/you-repo-name/settings/hooks/">https://github.com/tomasbjerre/you-repo-name/settings/hooks/</a>
+<ul>
+<li>Set the <em>Content type</em> to <code>application/json</code></li>
+<li>Set the <em>Payload URL</em> to <code>http://JENKINS_URL/generic-webhook-trigger/invoke?token=abc123</code></li>
+</ul>
+</li>
+</ul>
+<p>Next step, create a job in Jenkins and configure <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a>. It supports Multibranch pipelines but I usually just create pipeline jobs using <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">Job DSL Plugin</a>. That is a bit off topic and covered in the documentation in GitHub.</p>
+<ul>
+<li>Go to you Jenkins instance: <a href="http://localhost:8080/jenkins/">http://localhost:8080/jenkins/</a></li>
+<li>Create a new job, perhaps Pipeline or Free Style.</li>
+<li>A new Trigger will appear, once <a href="https://plugins.jenkins.io/generic-webhook-trigger">Generic Webhook Trigger</a> is installed, named &quot;<em>Generic Webhook Trigger</em>&quot;. I'm adding variable named <code>changed_files</code> with expression <code>$.commits[*].['modified','added','removed'][*]</code>.<br>
+<img src="https://bjurr.com/content/images/2018/04/generic_trigger_expr_files.png" alt="Jenkins Integration on Steroids"> You will probably want more variables here. Perhaps <code>$.ref</code> to get the branch name or <code>$.after</code> to get the commit that the ref points at after the change.</li>
+<li>Configure a token, this is how the invoker will know which job to trigger. If a job has a token configured then that token has to be supplied. If the job has no token configured then anyone can trigger the job.<br>
+<img src="https://bjurr.com/content/images/2018/08/configure-token-1.png" alt="Jenkins Integration on Steroids"></li>
+<li>Add a filter with <code>text</code> like <code>$changed_files</code> and <code>expression</code> like <code>&quot;src/main/resources/sql/[^&quot;]+?&quot;</code>.<br>
+<img src="https://bjurr.com/content/images/2018/04/generic_expr_folder.png" alt="Jenkins Integration on Steroids">  I'm only using one variable here but you can resolve more variables. Add more variables to the text-field and have a more complex regular expression.</li>
+</ul>
+<p>That is it. Save the job and it will trigger for changes in SQL-scripts and nothing else!</p>
+<h3 id="explaination">Explaination</h3>
+<p>So what happens in the example above? When a commit is pushed to GitHub, it will invoke the the configured URL with a webhook. In reality, there is <a href="https://developer.github.com/v3/activity/events/types/#pushevent">much more</a> in the webhook then this:</p>
+<pre><code>{
+ &quot;ref&quot;: &quot;refs/heads/changes&quot;,
+ &quot;after&quot;: &quot;0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c&quot;,
+ &quot;commits&quot;: [
+  {
+   &quot;added&quot;: [
+    &quot;.gitignore&quot;
+   ],
+   &quot;removed&quot;: [
+   ],
+   &quot;modified&quot;: [
+    &quot;README.md&quot;,
+    &quot;src/main/resources/sql/some_script.sql&quot;
+   ]
+  }
+ ],
+ repository {
+  &quot;git_url&quot;: &quot;git://github.com/baxterthehacker/public-repo.git&quot;
+ }
+}
+</code></pre>
+<p>The <a href="https://github.com/json-path/JsonPath">JSONPath</a> used above will resolve to <code>[&quot;.gitignore&quot;, &quot;README.md&quot;, &quot;src/main/resources/sql/some_script.sql&quot;]</code> and it will be available in a variable <code>$changed_files</code> (that can also be used later in the build).</p>
+<p>The <code>text</code> field of the <em>Optional filter</em> will also resolve to this, because we used <code>$changed_files</code> in that field.</p>
+<p>The <code>expression</code> field of the <em>Optional filter</em> will match <code>src/main/resources/sql/some_script.sql</code> which will trigger the build. Without that change, the build would not have been triggered.</p>
+<p>If you also define variables like:</p>
+<ul>
+<li><strong>branch</strong> with expression <code>$.ref</code></li>
+<li><strong>clone_url</strong> with expression <code>$.repository.git_url</code></li>
+</ul>
+<p>Then you can have a shell script build step like:</p>
+<pre><code>git clone $clone_url
+git checkout $branch
+...
+</code></pre>
+<h2 id="furtherreading">Further reading</h2>
+<p>Always turn to the wiki for the most accurate documentation:<br>
+<a href="https://plugins.jenkins.io/generic-webhook-trigger">https://plugins.jenkins.io/generic-webhook-trigger</a></p>
+<p>Any issues should be reported here:<br>
+<a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/issues">https://github.com/jenkinsci/generic-webhook-trigger-plugin/issues</a></p>
+]]></content:encoded></item><item><title><![CDATA[Managing 1000+ Git repositories in Jenkins with a breeze]]></title><description><![CDATA[<p>This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount of repositories!</p>
+<p>I am exclusively involved in <strong>Java projects</strong>. This post will sometimes assume <em>Maven</em> is being</p>]]></description><link>https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/</link><guid isPermaLink="false">5a755597c56a61057b219788</guid><category><![CDATA[Jenkins]]></category><category><![CDATA[pipeline]]></category><category><![CDATA[continuous-integration]]></category><category><![CDATA[Git]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sat, 03 Feb 2018 06:39:55 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/02/superhero-1.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/02/superhero-1.png" alt="Managing 1000+ Git repositories in Jenkins with a breeze"><p>This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount of repositories!</p>
+<p>I am exclusively involved in <strong>Java projects</strong>. This post will sometimes assume <em>Maven</em> is being used. But it can probably inspire a solution in other projects too. I will not supply the complete running code. I'm just going to include small snippets and focus on explaining the general idea.</p>
+<p>Some of this is implemented with Jenkins Configuration as Code, here:<br>
+<a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></p>
+<h1 id="problems">Problems</h1>
+<p>Splitting a big application into several smaller artifacts is a good thing! To me, that is obvious but still I find myself talking to people that don't agree on that. Here are some of the arguments I hear on why not to split applications.</p>
+<blockquote>
+<p>&quot;I want to build whatever I have checked out, locally, on my filesystem. We will need to spend many frustrating hours stepping dependencies between artifacts.&quot;</p>
+</blockquote>
+<blockquote>
+<p>&quot;It is hard to detect when artifacts no longer fit together. We will find severe problems late because we don't continuously integrate all the artifacts.&quot;</p>
+</blockquote>
+<blockquote>
+<p>&quot;We will need a huge amount of jobs in Jenkins (releasing, testing, integrating, deploying, snapshots...). We will need to spend much time managing them.&quot;</p>
+</blockquote>
+<p>Ok! All valid points! And <strong>all of them are more or less show stoppers if you don't do continuous integration right!</strong></p>
+<h1 id="solution">Solution</h1>
+<p>In short, I propose a solution where you:</p>
+<ul>
+<li>Define a clear branching strategy.</li>
+<li>Define a translation strategy between branch and Maven artifact version.</li>
+<li>Define how any given repo should be built.</li>
+<li>Automate and define how repos depend on each other.</li>
+<li>Add a <em>Jenkinsfile</em> to each repo.</li>
+<li>Create a <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">shared pipeline library</a>.</li>
+<li>Automate the creation of the jobs.</li>
+</ul>
+<p>You might consider <a href="https://wiki.jenkins.io/display/JENKINS/Pipeline+Multibranch+Plugin">Pipeline Multibranch Plugin</a>. I use <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">Job DSL</a> and <a href="https://plugins.jenkins.io/cloudbees-folder">Folders Plugin</a>. I have it create ordinary <a href="https://jenkins.io/doc/book/pipeline/">pipeline</a>-jobs in a folder structure with a folder for each repository.</p>
+<ul>
+<li>It gives me something static, the name of each job, to use when chaining jobs that depend on each other. There is a folder for each repository and it contains the jobs.</li>
+<li>It also allows several jobs to work with the same branch. I can easily create a release-job and a snapshot-job that both work with the <em>develop</em> branch.</li>
+</ul>
+<p>You could have a static release-job and use mutlibranch to dynamically create every other job. But still, I feel I have more control with <em>Job DSL</em> and I feel it makes Jenkins look more organized.</p>
+<h2 id="branchingstrategy">Branching strategy</h2>
+<p>You must know the meaing of the branches, in any given repo, in order to automate things. A defined branching strategy enables you to:</p>
+<ul>
+<li>Clone any given repo.</li>
+<li>Detect what branches exists.</li>
+<li>Be sure which branch to use for <em>snapshots</em> or <em>releases</em>.</li>
+</ul>
+<p>If your strategy is <a href="https://bjurr.com/gitflow-and-when-you-should-use-it/">GitFlow</a>, then:</p>
+<ul>
+<li>The <em>snapshot</em>-job will
+<ul>
+<li>Build snapshots from <em>develop</em>.</li>
+<li>Step dependencies in <em>develop</em>.</li>
+</ul>
+</li>
+<li>The <em>release</em>-job will
+<ul>
+<li>Build releases from <em>hotfix</em> if it exists or else  <em>release</em>.</li>
+</ul>
+</li>
+<li>The <em>feature</em>-job will build any <em>feature/X</em>-branches.</li>
+</ul>
+<p>Each repository has one release-cycle. Several artifacts, in the same repo, with different release-cycles are not allowed.</p>
+<h2 id="branchtoversiontranslation">Branch to version translation</h2>
+<p>The integration between the Git service and Jenkins is setup so that when a commit is pushed to a feature-branch:</p>
+<ul>
+<li>A job is triggered.</li>
+<li>The branch name is identified.</li>
+<li>A version is derived form the branch name.</li>
+<li>Check to see if there is global a <code>bom</code> with that version
+<ul>
+<li>If no <code>bom</code> fall back to some default, fail or automate creation of that ´bom´-version.</li>
+</ul>
+</li>
+<li>The artifacts are built, with a <code>bom</code> with the version, and uploaded to a Maven repository.</li>
+</ul>
+<p>The <code>bom</code> -repo may function in the same way. Developers branch out of <em>develop</em>, getting all default versions. They set specific versions for some artifacts and commit/push. Or you automate that same procedure whenever a <code>bom</code>-version is missing. Then the artifact that originally triggered the creation of that bom can find its version and set it to itself.</p>
+<p>Then it will be possible to automatically create <em>deploy</em>-jobs for any &quot;deployaple&quot; repository. Where a dropdown list can automatically be populated with features. Features are found by listing feature-branches and translating to versions.</p>
+<p>Developers won't have to fiddle with versions locally, they just have whatever version that is also in <em>develop</em>-branches. And can clone a bunch of repos, built locally, and work with that fitting together.</p>
+<h2 id="building">Building</h2>
+<p>You must know how to build any given repo. With Maven, the aggreement might be as simple as:</p>
+<ul>
+<li>The project is built from the root of the repo.</li>
+<li>The version, of the repository, is specified in the root of the repo. When using Maven, it is the version of the <em>pom.xml</em>.</li>
+<li>Different Maven profiles are allowed. Any profiles that produces artifacts should be specified as metadata about the repo in the <em>Jenkinsfile</em>.</li>
+</ul>
+<p>The important thing is to define these rules. Do not start treating specific repos differently in the global build scripts. Instead specify global rules that all repos should follow.</p>
+<h2 id="dependingrepositories">Depending repositories</h2>
+<p>To be able to automatically chain jobs and have them trigger each other, I need to know <em>depending repos</em> of each repo. The opposite of what you have in <code>pom.xml</code>.</p>
+<p>One way of doing that is with a job that:</p>
+<ul>
+<li>Regularly finds all repos, perhaps via the Git service REST-API.</li>
+<li>Parse the <code>pom.xml</code>-files.
+<ul>
+<li>Find out what <code>artifacts</code> are contains in what repos.</li>
+<li>Find out what <code>artifacts</code> are used in what repos.</li>
+</ul>
+</li>
+<li>Create a structure with the depending repos per repo.</li>
+<li>Optimize that structure so that transitive dependencies are removed from list of direct dependencies.</li>
+<li>Store that structure as a json text -file in a repo. Making it available for snapshot/release-jobs to clone and include.</li>
+</ul>
+<p>Having this information pre-calculated saves alot of time when it is needed by some job.</p>
+<p>Perhaps the depending repo structure can look something like this.</p>
+<pre><code>{
+ ...
+ &quot;PROJECT-A/example-repo-d&quot;: [
+  &quot;PROJECT-B/example-repo-b&quot;,
+  &quot;PROJECT-C/example-repo-d&quot;
+ ],
+ &quot;PROJECT-C/example-repo-d&quot;: [
+  &quot;PROJECT-E/example-repo-b&quot;
+ ]
+ ...
+}
+</code></pre>
+<h2 id="jenkinsfile">Jenkinsfile</h2>
+<p>It is very small and contains only metadata about the repo. This is just like <a href="https://github.com/jenkins-infra/pipeline-library/blob/master/vars/buildPlugin.groovy">Jenkins Infra</a> handles their 1000+ plugins.</p>
+<p>When using Maven, you might want to specify <em>profiles</em> to be built.</p>
+<p>A repo that needs to be built, nothing else, may look like this:</p>
+<pre><code>buildRepo()
+</code></pre>
+<p>It may specify profiles:</p>
+<pre><code>buildRepo(
+ profiles: [
+  'profile1'
+ ]
+)
+</code></pre>
+<p>And if a profiles are needed as well as no profile, it may look like:</p>
+<pre><code>buildRepo(
+ profiles: [
+  '',
+  'profile1'
+ ]
+)
+</code></pre>
+<p>This is all there is in the repositories. Only one <em>Jenkinsfile</em> and this is the only information it contains. I'm not saying you only need this. I'm just recommending to keep it light! Perhaps you invent thnkgs like <code>deployable: true</code> or <code>autoDeployEnv: 'TEST-XY'</code>...</p>
+<h2 id="sharedlibrary">Shared library</h2>
+<p>A <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">shared pipeline library</a> allows you to, only once, define how to do releases, snapshots and all other tasks.</p>
+<p>With the above <em>Jenkinsfile</em> there should be a <code>/vars/buildRepo.groovy</code> containing something like:</p>
+<pre><code>...
+def call(Map params = [:]) {
+...
+ if (JOB_BASE_NAME.equals(&quot;snapshot&quot;)) {
+ ...
+ } else if (JOB_BASE_NAME.equals(&quot;release&quot;)) {
+ ...
+ }
+...
+}
+...
+</code></pre>
+<h2 id="automatecreationofjobs">Automate creation of jobs</h2>
+<p>Most Git services (GitHub, GitLab, Bitbucket...) provide REST API:s. You can use that to automate creation/deletion/adjustment of jobs and always be in sync with the repos you have in your Git service. The job DSL would loop through all repositories.</p>
+<pre><code>...
+ folder(&quot;gen&quot;) {
+  displayName(&quot;Generated jobs&quot;)
+  description(&quot;&quot;&quot;
+   These are generated by ${JOB_URL}
+  &quot;&quot;&quot;)
+ }
+
+ getJson(server+ &quot;/rest/request/to/repos...&quot;)
+  .values
+  .each { repo -&gt;
+  folder(&quot;gen&quot;) {
+   displayName(&quot;gen/&quot; + repo.name)
+   description(&quot;&quot;&quot;
+    Generated by ${JOB_URL}
+   &quot;&quot;&quot;)
+  }
+
+  pipelineJob(&quot;gen/&quot; + repo.name + &quot;/snapshot&quot;) {
+...
+</code></pre>
+<h2 id="templates">Templates</h2>
+<p>I use the <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">Job DSL</a> plugin. Perhaps you want these jobs for every repository:</p>
+<ul>
+<li><em>snapshot</em></li>
+<li><em>release</em></li>
+<li><em>feature</em></li>
+<li><em>pull-request</em></li>
+</ul>
+<p>Also a global job, <em>release-orchestration</em>.</p>
+<p>All of these templates are pipelines. Their logic is implemented in the shared library. The shared library will find the Git repo to use from <code>scm.getUserRemoteConfigs().get(0).getUrl()</code> and the kind of job to build from <code>JOB_BASE_NAME</code>.</p>
+<h3 id="snapshot">Snapshot</h3>
+<p>This job will:</p>
+<ul>
+<li>Make sure <em>develop</em> is using latest dependencies (<a href="http://www.mojohaus.org/versions-maven-plugin/update-properties-mojo.html">found in Maven repository</a>). If there are newer versions:
+<ul>
+<li>Step dependencies to latest version.</li>
+<li>Commit changes.</li>
+<li>Push changes.</li>
+<li>Re-trigger self, to help Jenkins understand that this new commit does not need to be built again. Done.</li>
+</ul>
+</li>
+<li>Build a snapshot version.</li>
+<li>Upload snapshot-version to Maven repository.</li>
+<li>Trigger <em>dependingRepos</em> configured in <em>Jenkinsfile</em>.</li>
+<li>Done.</li>
+</ul>
+<p>When using Maven, you can do this with <a href="http://www.mojohaus.org/versions-maven-plugin/">Versions Maven Plugin</a>.</p>
+<h3 id="release">Release</h3>
+<p>This job will:</p>
+<ul>
+<li>Start from commit <em>C1</em>.</li>
+<li>Set dependencies to latest released versions.</li>
+<li>Step version to next release-version.</li>
+<li>Make a commit <em>C2</em>.</li>
+<li>Set dependencies to latest snapshots.</li>
+<li>Step version to next snapshot-version.</li>
+<li>Make a commit <em>C3</em>.</li>
+<li>Try to push changes. If not successful:
+<ul>
+<li>Hard reset to <em>C1</em>.</li>
+<li>Pull.</li>
+<li>Start again with creating <em>C2</em>.</li>
+<li>Do this loop, perhaps 5 times before giving up and fail.</li>
+</ul>
+</li>
+</ul>
+<p>This allows developers to work in the branches during the release-process.</p>
+<p>Now that we know we are in sync with remote Git repo on where to perform the release, we can continue doing so.</p>
+<ul>
+<li>Tag <em>C2</em> with the release-version.</li>
+<li>Perform the build commands, <code>mvn package</code> and loop any profiles needed.</li>
+<li>Deploy in Maven repository, <code>mvn deploy</code>.</li>
+</ul>
+<p>When using Maven, you can do this with <a href="http://www.mojohaus.org/versions-maven-plugin/">Versions Maven Plugin</a>.</p>
+<h3 id="releaseorchestration">Release orchestration</h3>
+<p>This job will:</p>
+<ul>
+<li>Orchestrates a release.</li>
+<li>Is parameterized with each repo.</li>
+<li>When triggered:
+<ul>
+<li>Calculates the order to release selected repos. With the information found in their <em>Jenkinsfile</em>:s.</li>
+<li>Invokes the <em>release</em>-jobs of each selected repo.</li>
+</ul>
+</li>
+</ul>
+<h1 id="features">Features</h1>
+<p>Here is what features this setup can provide and how I intend them to be used.</p>
+<h2 id="release">Release</h2>
+<p>A release of a single repo can be performed from its <em>release</em>-job.</p>
+<p>This will look at each repo and release from the branch that is first found in this order:</p>
+<ol>
+<li><em>hotfix</em></li>
+<li><em>release</em></li>
+<li><em>develop</em></li>
+<li><em>master</em></li>
+</ol>
+<p>So if you want to release from a specific commit, not latest <em>develop</em>, just push a <em>release</em>, or <em>hotfix</em>, -branch that points to that commit.</p>
+<h3 id="orchestratingarelease">Orchestrating a release</h3>
+<p>A release of one, or more, repos can be performed from the global <em>release-orchestration</em>-job. This will:</p>
+<ul>
+<li>Ensure the release of each repo
+<ul>
+<li>Is done in the right order.</li>
+<li>Their dependencies will be released first, if selected.</li>
+<li>Use the latest release of their dependencies.</li>
+</ul>
+</li>
+<li>After release, trigger the snapshot-job of the first repo that was released. So that all the snapshot-jobs will run and step snapshot-versions.</li>
+</ul>
+<p>It will invoke the release-jobs of each repo. This means you can have a look there for more details on that specific release.</p>
+<h2 id="hotfix">Hotfix</h2>
+<p>Having the priority among branches, mentioned above, will enable you to push a <em>hotfix</em>-branch from any commit and have the release being performed from that commit. If your <em>master</em> points to latest installed version:</p>
+<ul>
+<li><code>git checkout master</code></li>
+<li><code>git checkout -b hotfix</code></li>
+<li><code>git push -u origin hotfix</code></li>
+</ul>
+<p>Then just trigger the release.</p>
+<h1 id="advantages">Advantages</h1>
+<p>Your entire <strong>Jenkins configuration is put under version control</strong>. Well... you need to create one Job DSL -job manually that polls, or is triggered by changes in, the git service. But that job can have its DSL in a Git-repo. This has a bunch of advantages.</p>
+<ul>
+<li>No more browsing around in Jenkins and fiddling with settings.</li>
+<li>You can track changes in the jobs. Just use <code>git blame</code>, it is all code now!</li>
+<li>All your jobs are backed up with Git.</li>
+<li>You can easily setup a development instance of Jenkins that behaves very much like your production instance.</li>
+<li>You can generate release-jobs in one Jenkins and snapshot jobs in another. Letting only a few people use the release-jenkins and anyone use the other instance.</li>
+</ul>
+]]></content:encoded></item><item><title><![CDATA[Sharing Gradle build scripts across repositories]]></title><description><![CDATA[<p>While migrating my OSS from Maven Central to <a href="https://bintray.com/tomasbjerre">Bintray</a> I realized I had a lot of duplicated Gradle scripts in different repos. I found <a href="https://stackoverflow.com/questions/9539986/how-to-share-a-common-build-gradle-via-a-repository">some alternatives</a> on how to share build scripts across repositories. I built on that and here is what I did.</p>
+<h1 id="solution">Solution</h1>
+<p>The Gradle scripts are gathered</p>]]></description><link>https://bjurr.com/sharing-gradle-build-scripts-cross-repositories/</link><guid isPermaLink="false">5a23da214b28b905d8304a37</guid><category><![CDATA[Gradle]]></category><category><![CDATA[Java]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sun, 03 Dec 2017 19:35:10 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/02/5847fb12cef1014c0b5e48d1.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/02/5847fb12cef1014c0b5e48d1.png" alt="Sharing Gradle build scripts across repositories"><p>While migrating my OSS from Maven Central to <a href="https://bintray.com/tomasbjerre">Bintray</a> I realized I had a lot of duplicated Gradle scripts in different repos. I found <a href="https://stackoverflow.com/questions/9539986/how-to-share-a-common-build-gradle-via-a-repository">some alternatives</a> on how to share build scripts across repositories. I built on that and here is what I did.</p>
+<h1 id="solution">Solution</h1>
+<p>The Gradle scripts are gathered in a <em>script repository</em>, see <a href="https://github.com/tomasbjerre/gradle-scripts">Gradle Scripts</a>. The <em>script repository</em> is a Gradle project in its own that packages the scripts into a <em>jar</em>. That <em>jar</em> is added as a build script dependency in projects that needs the scripts.</p>
+<p>This is really convenient when managing a large amount of repositories. Scripts, each adding a specific ability to the build process, can be gathered at one single place. Be released and managed in branches just like any other project. The dependency will also be cached, just like any other dependency, making the build much faster then applying a script form a URL.</p>
+<p>This shows another advantage of Gradle compared to Maven. If I was using Maven I would have to create a <em>pom</em> that I would use as <em>parent</em> for these projects. Anyone using the project would also need that <em>parent</em>. So adding functionality to the build process would have negative effect on the built artifact. A parent would also risk adding too much functionality to the build process. If I had a Maven plugin and a pure library, I would not be able to construct a logical <em>parent</em> for them. With Gradle I just pick the abilities I want and there will be no trace, except the intended, in the built artifact.</p>
+<h1 id="implementation">Implementation</h1>
+<p>In my case I use <a href="https://jitpack.io/">JitPack</a> to build and supply the script jar. It means I can have a master branch where I can push changes to the scripts and immediately have those changes take effect in all my repos. But within an organization you would probably want to build and upload to something like Nexus or Artifactory.</p>
+<p>A project using this method will have a very slim build script. A running example is the <a href="https://github.com/tomasbjerre/violations-lib/blob/master/build.gradle">build script</a> of my <a href="https://github.com/tomasbjerre/violations-lib">Violations Lib</a>.</p>
+]]></content:encoded></item><item><title><![CDATA[FitNesse with Maven and Jenkins]]></title><description><![CDATA[<p>I needed to automate <a href="http://www.fitnesse.org/">FitNesse</a> tests in my clients build process. I also needed the test cases in Git so that <em>testers</em> can develop tests in the same feature branches as the <em>developers</em> are using.</p>
+<p>I was looking for a simple way of doing that in a Java project where</p>]]></description><link>https://bjurr.com/fitnesse-with-maven-and-jenkins/</link><guid isPermaLink="false">59e067ad8edbbd05ee0cef90</guid><category><![CDATA[fitnesse]]></category><category><![CDATA[Jenkins]]></category><category><![CDATA[maven]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Fri, 13 Oct 2017 07:32:28 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/02/fitnesse-1.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/02/fitnesse-1.png" alt="FitNesse with Maven and Jenkins"><p>I needed to automate <a href="http://www.fitnesse.org/">FitNesse</a> tests in my clients build process. I also needed the test cases in Git so that <em>testers</em> can develop tests in the same feature branches as the <em>developers</em> are using.</p>
+<p>I was looking for a simple way of doing that in a Java project where Maven and Jenkins is being used. I did not find any acceptable solutiion, here is my solution.</p>
+<h1 id="whatifound">What I Found</h1>
+<p>I found <a href="http://www.fitnesse.org/FitNesse.UserGuide.WritingAcceptanceTests.RunningFromJunit">Running from Junit</a> in the official documentation. But I was unable to use it.</p>
+<ul>
+<li>That API looks strange and it is unclear how to use it.</li>
+<li>I could not find any API for specifying where the jar files, with the <em>service under test</em>, are on the filesystem. When digging into the code on GitHub I concluded that there are no such feature.</li>
+</ul>
+<p>I found the <a href="https://wiki.jenkins.io/display/JENKINS/FitNesse+Plugin">Jenkins Plugin</a> but I wanted testers to be able to work with the test cases locally. That plugin would only, potentially, solve it in Jenkins. There is also <a href="http://blog.xebia.com/how-to-integrate-fitnesse-tests-into-jenkins/">Xebia</a> but same problem there.</p>
+<h1 id="whatidid">What I Did</h1>
+<p>I created a <code>pom</code> that uses <code>antrun</code> to basically just run the <code>java</code> program with command line arguments. The version of FitNesse is managed in the <code>pom</code>.</p>
+<p>The wiki pages have:</p>
+<pre><code>!define TEST_SYSTEM {slim}
+!path target/dependencies/*.jar
+</code></pre>
+<p>Here is the <code>pom.xml</code>.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+ xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+ &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+ &lt;artifactId&gt;bjurr-fitnesse&lt;/artifactId&gt;
+
+ &lt;dependencies&gt;
+  &lt;dependency&gt;
+   &lt;groupId&gt;org.fitnesse&lt;/groupId&gt;
+   &lt;artifactId&gt;fitnesse&lt;/artifactId&gt;
+   &lt;version&gt;20161106&lt;/version&gt;
+   &lt;scope&gt;test&lt;/scope&gt;
+  &lt;/dependency&gt;
+ &lt;/dependencies&gt;
+
+ &lt;properties&gt;
+  &lt;fitnesse.command&gt;&lt;/fitnesse.command&gt;
+ &lt;/properties&gt;
+
+ &lt;build&gt;
+  &lt;plugins&gt;
+   &lt;plugin&gt;
+    &lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.3&lt;/version&gt;
+    &lt;executions&gt;
+     &lt;execution&gt;
+      &lt;id&gt;start-fitnesse&lt;/id&gt;
+      &lt;phase&gt;test&lt;/phase&gt;
+      &lt;configuration&gt;
+       &lt;tasks&gt;
+        &lt;copy todir=&quot;target/dependencies&quot; flatten=&quot;true&quot;&gt;
+         &lt;fileset dir=&quot;../&quot;&gt;
+          &lt;include name=&quot;**/*.jar&quot; /&gt;
+         &lt;/fileset&gt;
+        &lt;/copy&gt;
+        &lt;echo message=&quot;&quot; /&gt;
+        &lt;echo message=&quot;&quot; /&gt;
+        &lt;echo message=&quot;Fitnesse wiki available here:&quot; /&gt;
+        &lt;echo message=&quot;&quot; /&gt;
+        &lt;echo message=&quot;  http://localhost:8888/MyTests.MySuite&quot; /&gt;
+        &lt;echo message=&quot;&quot; /&gt;
+        &lt;echo message=&quot;&quot; /&gt;
+        &lt;java classname=&quot;fitnesseMain.FitNesseMain&quot; classpathref=&quot;maven.test.classpath&quot;
+         fork=&quot;true&quot;&gt;
+         &lt;arg line=&quot;-p 8888&quot; /&gt;
+         &lt;arg line=&quot;-d .&quot; /&gt;
+         &lt;arg line=&quot;-e 9999&quot; /&gt;
+         &lt;arg line=&quot;-b target/fitnesse-junit.xml&quot; /&gt;
+         &lt;arg line=&quot;${fitnesse.command}&quot; /&gt;
+         &lt;jvmarg value=&quot;-Xmx1024m&quot; /&gt;
+        &lt;/java&gt;
+       &lt;/tasks&gt;
+      &lt;/configuration&gt;
+      &lt;goals&gt;
+       &lt;goal&gt;run&lt;/goal&gt;
+      &lt;/goals&gt;
+     &lt;/execution&gt;
+    &lt;/executions&gt;
+   &lt;/plugin&gt;
+  &lt;/plugins&gt;
+ &lt;/build&gt;
+&lt;/project&gt;
+</code></pre>
+<p>To start the wiki to work with the test cases I do:<br>
+<code>mvn test</code><br>
+And that will start the FitNesse wiki on <em>localhost</em>.</p>
+<p>When tests change, the changed wiki pages are committet and pushed to the remote repo.</p>
+<p>To run all the tests I do:<br>
+<code>mvn test -Dfitnesse.command=&quot;-c MyTests.MySuite?suite&amp;format=junit&quot;</code><br>
+And in Jenkins I use the <a href="https://wiki.jenkins.io/display/JENKINS/Lockable+Resources+Plugin">Lockable Resources Plugin</a> to allow IP port collision and only have one job running FitNesse at once.</p>
+<p>A pipeline <code>stage</code> may look like this:</p>
+<pre><code>...
+stage('FitNesse test') {
+  lock(resource: &quot;compiler_${env.NODE_NAME}&quot;, inversePrecedence: true) {
+   try {
+    sh &quot;&quot;&quot;
+     cd fitnesse
+     ${mvnHome}/bin/mvn test -Dfitnesse.command=\&quot;-c MyTests.MySuite?suite&amp;format=junit\&quot;
+     tar -zcvf fitnesseTestResults.tar.gz FitNesseRoot/files/testResults
+    &quot;&quot;&quot;
+    archiveArtifacts artifacts: 'fitnesseTestResults.tar.gz', fingerprint: true
+    junit &quot;**/fitnesse/target/*.xml&quot;
+    commentMr(env.gitlabMergeRequestId, &quot;FitNesse ok :) $gitlabSourceBranch ${BUILD_URL}&quot;)
+   } catch (e) {
+    commentMr(env.gitlabMergeRequestId, &quot;FitNesse **not ok** in $gitlabSourceBranch ${BUILD_URL}&quot;)
+    junit &quot;**/fitnesse/target/*.xml&quot;
+    throw e
+   }
+  }
+ }
+...
+</code></pre>
+]]></content:encoded></item><item><title><![CDATA[Starta Eget Konsultbolag]]></title><description><![CDATA[<p>Efter över 7 år som anställd konsult (mjukvaruutvecklare) valde jag nyligen att starta eget aktiebolag. Jag gör precis samma sak nu som jag gjorde som anställd men numera i mitt eget bolag istället. Det här inlägget handlar om hur jag gjorde detta. Googlar man kring att starta eget så hittar</p>]]></description><link>https://bjurr.com/starta-eget-konsultbolag/</link><guid isPermaLink="false">597b4433e521cb4fbd9186a8</guid><category><![CDATA[Swedish]]></category><category><![CDATA[aktiebolag]]></category><category><![CDATA[bokföring]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Thu, 29 Jun 2017 10:42:56 GMT</pubDate><media:content url="https://bjurr.com/content/images/2017/12/vid_poolen.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2017/12/vid_poolen.png" alt="Starta Eget Konsultbolag"><p>Efter över 7 år som anställd konsult (mjukvaruutvecklare) valde jag nyligen att starta eget aktiebolag. Jag gör precis samma sak nu som jag gjorde som anställd men numera i mitt eget bolag istället. Det här inlägget handlar om hur jag gjorde detta. Googlar man kring att starta eget så hittar man mycket. Men jag saknade någon som beskriver det utifrån mina förutsättningar, det är vad jag försöker göra här, eftersom jag tror att många har samma förutsättningar som mig. <strong>Oh, and sorry if you don't speak Swedish =) The topic is about starting your own company in Sweden, you are probably not interested.</strong></p>
+<p>Ska också säga att allt jag tagit reda på här är genom googling och jag tar inget ansvar för att det jag säger här är korrekt och riktigt! Så var kritisk när du läser vad jag skriver nedan!</p>
+<p>Jag blir ofta kontaktad angående det här blogginlägget, men jag vill gärna hålla diskussionerna öppet här istället: <a href="https://www.facebook.com/groups/starta.eget.konsultbolag/">https://www.facebook.com/groups/starta.eget.konsultbolag/</a></p>
+<p>En migrering mot en egen sida är påbörjad på Github: <a href="https://github.com/tomasbjerre/starta-eget-konsultbolag">https://github.com/tomasbjerre/starta-eget-konsultbolag</a></p>
+<h1 id="varfrstartaeget">Varför Starta Eget?</h1>
+<p>Du kan <strong>skatteplanera</strong>. Om du redan innan året är slut vet <a href="http://www.regeringen.se/pressmeddelanden/2017/03/upprakningen-av-skiktgranserna-for-statlig-inkomstskatt-2018-begransas-och-den-sarskilda-inkomstskatten-for-utomlands-bosatta-hojs/">gräns för statlig skatt</a> och eventuella avdrag du kommer att göra. Då kan du räkna ut exakt vilken lön du kan betala ut från bolaget för att du som privatperson ska hamna precis på gränsen för statlig skatt.</p>
+<p>Utöver lönen kan du också göra en <strong>utdelning</strong>. Då skattar du 20% på summan upp till <code>2.75</code> gånger föregående års <em>inkomstbasbeloppet</em> för 2018 blir det <code>2.75 * 59300 = 163075</code>. Det är det som kallas förenklingsregeln. Man kan också räkna fram en gräns, som är hälften av utbetald lön, och använda den om den är mer fördelaktig. <a href="https://www.foretagande.se/sa-beraknas-skatt-pa-utdelning-3-12-reglerna/">Den här blog-posten</a> beskriver detta bra. Första året kan du eventuellt inte använda förenklingsregeln, de diskuterar det i <a href="https://forum.vismaspcs.se/visma_spcs/topics/utdelning-forsta-aret">den här tråden</a>.</p>
+<p>Jag har <a href="https://docs.google.com/spreadsheets/d/1jfQSSOEINNq3OVc5pYG5NeFkvgcDqOEu1HjzpU2RQm0/edit?usp=sharing">gjort ett excel-ark</a> för att <strong>optimera skatten</strong>. Skatteverket har även <a href="https://www.skatteverket.se/privat/sjalvservice/allaetjanster/tjanster/raknautdinskatt.4.18e1b10334ebe8bc80001950.html">en sida</a> där man kan räkna ut sin skatt. Du kan även läsa mer om <a href="https://www.verksamt.se/starta/skatter-och-avgifter/aktiebolag">skatter och avgifter på Verksamt</a>. Se även <a href="http://www.driva-eget.se/kalkyler/lonekalkyl">den här sidan</a> för att få en uppfattning om hur mycket lön man kan ta ut.</p>
+<p>Det finns anledning att vara rädd för det faktum att man inte får några pengar alls om man inte har ett uppdrag. Men eget bolag kan du använda en <strong><a href="https://www.skatteverket.se/foretagochorganisationer/foretagare/enskildnaringsverksamhet/periodiseringsfond.4.361dc8c15312eff6fd2b8f2.html">periodiseringsfond</a></strong> där du lägger undan pengar mellan räkenskapsår. Du kan alltså optimera din lön för att slippa statlig skatt, lägga undan pengar i en periodiseringsfond och sedan betala ut dem ett år då du har mindre inkomster. På så vis slipper du både bolagsskatten och statlig inkomstskatt.</p>
+<p>Du är <strong>säkrare som egen</strong>. Bolaget kommer förmodligen att dra in mer pengar än vad som är lämpligt att direkt batala ut som lön. Får du <em>500</em>kr/timme (ett väldigt lågt pris!) så drar du in cirka <em>80 000</em>kr under en månad. Då kan du betala <em>60 000</em>kr i lön. Men du vill förmodligen bara betala ut <em>36 575</em>kr eftersom det är gränsen för statlig skatt. Att betala den lönen kostar cirka <em>48 000</em>kr för bolaget och du har alltså <em>32 000</em>kr kvar i bolaget. Gör du det varje månad har du <em>384 000</em>kr kvar i bolaget när räkenskapsåret är slut. Du vill förmodligen använda en del för att göra en utdelning. Men för att jämföra med att vara anställd så skulle du kunna betala ut samma lön <em>6</em> månader in på nästa år, trots att du står helt utan inkomster! För att räkna ut hur mycket lön du kan betala ut kan du alltså räkna såhär <code>timpenning*(52-semesterveckor)*40/12/1.31</code> så kanske <code>500*(52-6)*40/12/1.31 = 58 524</code>.</p>
+<p>Du väljer själv om du vill betala in till en <strong>tjänstepension</strong> och i så fall vilken. Jag har tvingats betala till SEB under en längre tid. Det enda jag bryr mig om är deras fondutbud. I SEB hittade jag bara en fond, <a href="http://web.msse.se/SEB/SGF/quicktake.aspx?six=SEB-BDSEKA">en räntefond</a>, som kändes &quot;ok&quot;. Det är även en fördel att du kan maximera lönen, göra utdelning och om det efter detta fortfarande finns pengar över kan du använda dem till tjänstepension. Du slipper alltså låsa in pengar i en sådan pension om det inte är så att det är en skattemässig fördel. Med tanke på att du, via utdelning, kan få ut kapital med en skatt på under 40% så kanske du inte vill använda en tjänstepension. Pengarna du får ut via utdelningen är ju helt olåsta och du kan investera hur du vill.</p>
+<p>Du <strong>slipper ha lön efter ålder</strong>. Ju yngre du är, ju mer tjänar du på att ha eget konsultbolag. Den dumma tanken att man ska börja på en låg lönenivå och sedan öka ett par procent per år mappar inte alls mot <a href="https://computersweden.idg.se/2.2683/1.717731/java-utvecklare-heta">vad kunderna betalar</a> för dig per timme. Kunderna har oftast ett pris på juniorer och ett på seniorer. Att du är 30, 31 eller 40 år gammal spelar ingen roll för priset. Är du yngre anställd konsult betalar du för dina äldre kollegors lön och förmåner. Det kan mycket väl vara så att du drar in mer pengar än någon som är 20 år äldre. Med eget bolag mer än dubblade jag min lön.</p>
+<p>Du kan <strong>köpa kontorsmaterial väldigt billigt</strong>. Dator, headset, hörlurar, skärmar... till mindre än halva priset jämfört med om du köper det privat. Då tänker jag inte bara på momsen. Tänk även på hur mycket pengar bolaget behöver betala ut för att, efter skatt och arbetsgivaravgift, kunna sätta in summan på det privata kontot. Såklart måste man tänka på att det man köper ägs av företaget och inte dig privat.</p>
+<p>Så fort du har möjlighet att betala ut <strong><a href="https://www.vismaspcs.se/visma-support/visma-eget-aktiebolag/content/skattefria_traktamenten.htm">skattefritt traktamente</a></strong> så ska du göra det. Du slipper tjafs med en arbetsgivare som nekar dig något som är så självklart.</p>
+<p>Du kan <strong>åka på vilken konferens du vill</strong> och låta bolaget betala. Det finns ju intressanta utvecklarkonferenser nästan överallt. Du behöver bara <a href="http://lmgtfy.com/?q=sidney+developer+conference">hitta en</a> och åka. Inget tjafs med en arbetsgivare som tycker det är för dyrt. Inga dryga övningar, innan eller på plats, utan bara du som bestämmer vilka föreläsningar du tycker är intressanta och som du går på.</p>
+<p>Jag tycker att de flesta möten är meningslösa och väldigt tråkiga. Det blir klart <strong>färre möten</strong> med eget bolag. Du kan spendera din tid med kunden istället för tråkiga månadsmöten =)</p>
+<p>Du kan få <strong>mindre administrativt jobb</strong>. Som anställd hade jag kvitton att rapportera varje vecka. Jag köpte tågbiljetter via SJ:s hemsida och fick alltså kvittot som PDF. Jag var tvungen att rapporera dem varje vecka med kostnad och moms. Skriva ut ett papper i samband med tidrapportering. Skriva ut mina kvitton. Häffta fast mina kvitton på pappret från tidrapporteringssystemet. Leta upp kuvert samt frimärke. Leta upp brevlåda och posta kuvert med tidrapporten till konsultbolagets kontor. Som egen lägger jag aldrig mer än 2 timmar totalt under en hel månad på att sköta den fullständiga bokföring inklusive alla kvitton. Allt gör jag digitalt.</p>
+<p>Till sist, och kanske det absolut bästa argumentet. Jag har <strong>alltid sett mig själv som mitt eget varumärke</strong>. Då är ju inte steget långt till att faktiskt vara det också.</p>
+<h1 id="hurstartaeget">Hur Starta Eget?</h1>
+<p>Jag listar här kortfattat vad man behöver göra. Längre ner finns vissa steg mer utförligt beskrivna. Du kan räkna med att det tar 1-2 månader från att du skickar in första ansökan till att allt runt bolaget är klart och du kan börja jobba i det. Skadar inte att titta på <a href="https://www.verksamt.se/alla-e-tjanster/din-checklista/aktiebolag">andra listor också</a> för att säkra att du inte glömt något.</p>
+<p>Jag valde <strong>aktiebolag</strong> framför enskild firma. Då är bolaget en juridisk person som också har ansvaret. En tydlig gräns mellan bolag och privat ekonomi alltså. Jag kan rekommendera <a href="https://www.verksamt.se/fundera/valj-foretagsform">Verksamts jämförelse av företagsformer</a>.</p>
+<p><strong>Skapa ansökan</strong> på <a href="https://www.verksamt.se/">Verksamt</a>. Du kommer behöva en verksamhetsbeskrivning. Min ser ut såhär:</p>
+<blockquote>
+<p>Företaget ska bedriva konsultverksamhet företrädesvis inom IT, samt utveckla mjukvaruprodukter, äga och förvalta värdepapper och utöva därmed förenlig verksamhet.</p>
+</blockquote>
+<p>När det gäller <strong>företagsnamn</strong> så rekommenderar jag att bara ta ditt eget namn. AB eller aktiebolag måste vara med i namnet. Så jag valde <em>Tomas Bjerre AB</em>. Risken om du väljer något annat är att Bolagsverket nekar dig för att namnet liknar något som redan finns. Onödigt strul och du kan alltid ändra senare.</p>
+<p>Du kommer behöva ange en <strong>SNI-kod</strong>. Jag valde <em>62010</em>.</p>
+<p>När du skickat iväg ansökan till Bolagsverket kommer de invänta ett <strong>bankintyg</strong>. Läs mer om att välja bank nedan. Du behöver kontakta en bank för att skapa ett företagskonto. Banken kommer be dig sätta in 50 000 kr på ett speciellt konto. Banken behöver kunna tala om för Bolagsverket att här finns det 50 000 kr som satts in med avsikt att användas för aktiekapitalet. När du gjort detta ger de dig en e-postadress som du sedan ger till Bolagsverket (via verksamt.se). Sedan frågan Bolagsverket banken om pengarna är där och när banken svarar ja registreras bolaget. Så fort bolaget är skapat så har du sedan ett företagskonto där det från start finns 50 000 kr.</p>
+<p>Jag valde <strong>räkenskapsåret</strong> som <em>0101 - 1231</em>. Jag kan dock rekommendera brutet räkenskapsår. Alltså att man väljer ett år som inte är ett kalenderår. Fördelen blir då att du kan välja vilket år du betalar ut lönen på, om du når statlig skatt 2017 kan du vänta till 2018 med att fortsätta betala ut lön. Det är inte helt enkelt att <a href="https://www.skatteverket.se/download/18.3aa8c78a1466c584587d059/1408515815569/42405.pdf">ändra i efterhand</a> och att ändra det bara för att undvika skatt är inte en godtagbar anledning.</p>
+<p>När du startar aktiebolag ska bolaget ha <strong>F-skatt</strong> och du som privatperson har A-skatt. Jag valde <strong>kvartalsmoms</strong>. Som <strong>redovisningsmetod</strong> valde jag <a href="https://www.e-conomic.se/bokforingsprogram/ordlista/kontantmetoden">kontantmetoden</a> (kallas även bokslutsmetoden). Jag uppfattade den som enklast, se hur man <a href="https://forum.vismaspcs.se/visma_spcs/topics/bokfora-inkop-med-kreditkort-i-visma-eekonomi">bokför köpt med kreditkort</a> t.ex.</p>
+<p>Det är väldigt svårt att uppskatta den <strong>förväntade vinsten</strong> första året. Andra året kommer Skatteverket föreslå en. Ett tips är att ange den lågt. I mitt fall skulle jag först betala in 20 000 kr innan jag hunnit få en enda inkomst i bolaget. Skulle du råka ut för det är det bara att göra en ny preliminär inkomstdeklaration via Skatteverket och ange en lägre förväntad vinst. Då fick jag ner denna siffran till 7 000 kr istället.</p>
+<p>Det finns många smidiga <strong>bokföringsprogram</strong>. <a href="https://sv.wikipedia.org/wiki/Redovisning">Redovisningen</a> var nog det jag var mest rädd för i början. Jag märkte tidigt att när jag googlade om hur man bokför olika saker så kom jag ofta in på <a href="https://forum.vismaspcs.se/visma_spcs">Visma:s support forum</a>. Jag har tidigare använt deras tidrapportering, PX, vilket suger något helt otroligt. Ser ut som en sommarjobbare hackade ihop det för 15 år sedan och att man inte rört det sedan dess. Men även om jag var väldigt skeptisk till detta bolag så valde jag ändå <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> för bokföring just för att deras support verkar vara helt exemplarisk. Att direkt bokföra ett kvitto i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a>  är betydligt enklare än det jag tidigare gjort via tidrapportering som anställd. Du kanske t.ex. vill bokföra <a href="https://forum.vismaspcs.se/visma_spcs/topics/8fxz374h0czze?topic-reply-list%5Bsettings%5D%5Bfilter_by%5D=all">bokföringsprogrammet</a>, <a href="https://forum.vismaspcs.se/visma_spcs/topics/7h3lv4csqal8w">köp av dator och försäkring</a> eller <a href="https://forum.vismaspcs.se/visma_spcs/topics/con2lpq5fex2f">köp av tågbiljett</a>. De <a href="https://www.youtube.com/watch?v=jGgnxd6uBh4">gör t.o.m. filmer</a> där de visar vissa flöden.</p>
+<p>Du lär behöva en <strong>mobil</strong> i bolaget. Som jag förstår det är det ok att köpa telefonen på bolaget. Även telefoni och SMS är ok. Datatrafiken däremot kan behöva förmånsbeskattas. Det i kombination med att man slipper många dryga samtal om man istället har ett privat abonnemang, gjorde att jag köpte den privat.</p>
+<p>Du lär behöva en <strong>ansvarsförsäkring</strong>. Jag valde en <a href="https://www.if.se/web/se/foretag/varaforsakringar/offert/pages/default.aspx?varde=startforsakring">från If</a> och fick betala 5 294 kr. Har du inte det och du råkar ut för något, säg att någon kräver dig på flera miljoner, så konkursar du bara bolaget och slipper undan. Men med en ansvarsförsäkring så kan du, kanske, göra rätt för dig och betala. På så vis blir du en mer attraktiv konsult att anlita och det står även ofta i kontrakten att du ska ha en försäkring.</p>
+<p>Jag valde att kontakta en <strong>redovisningskonsult</strong> som hjälper mig med ekonomiska frågor samt tar hand om <strong>bokslut</strong> / <strong>årsredovisning</strong> / <strong>deklaration</strong>. Jag tar hand om löpande bokföring samt kvartalsmoms, skatter och lön. Det kostar cirka 6 000 kr per år. En redovisningskonsult kan hjälpa dig med allt möjligt i bolaget. Vissa ger dem fullmakt så de kan sköta all ekonomi. Jag fick tag på honom genom en bekant som tipsade men annars är det enkelt att googla. Har du valt Visma så <a href="https://vismaspcs.se/produkter/redovisning/visma-eekonomi-byra">kan de hjälpa dig</a>. I <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> kan du även skapa en inloggning till din redovisningskonsult.</p>
+<p><strong>Revisor</strong> är valfritt om man <a href="http://www.bolagsverket.se/ff/foretagsformer/aktiebolag/starta/revisor">omsätter under 3 miljoner</a>. Det använder jag inte.</p>
+<p>Det kan också vara bra att ha klart för sig <strong>hur man hittar kunder</strong>. Det finns många rena konsultmäklare som tar en procentsats, ofta mellan 10-20% på din timpenning, om du tar ett uppdrag via dem. De har ofta ramavtal med stora konsultköpare. Är du redan anställd som konsult kanske du i början fortsätter med samma kund fast som underkonsult istället. Se, t.ex.:</p>
+<ul>
+<li><a href="http://www.assistera.se/sv">Assistera</a></li>
+<li><a href="https://www.brainville.com/">Brainville</a></li>
+<li><a href="https://www.eworkgroup.com/se/">EWork</a></li>
+<li><a href="https://cv.experis.se/">Experis</a></li>
+<li><a href="http://www.kvadrat.se/bli-kvadratare/">Kvadrat</a></li>
+<li><a href="https://www.toptal.com/">Toptal</a></li>
+</ul>
+<p>Och till sist, du kan eventuellt göra <strong><a href="http://www.kompred.se/nyttiga-tips/missa-inte-investeraravdraget/">investeraravdraget</a></strong> i din privata deklaration efter att du startat aktiebolag.</p>
+<h2 id="bank">Bank</h2>
+<p>Jag frågade först några banker via telefon och mail (ICA, Avanza, Swedbank). Det kändes som att de inte riktigt förstod vad jag menade när jag sa att jag ville ha ett <strong>bankintyg</strong>.</p>
+<h3 id="danskebank">Danskebank</h3>
+<p><strong>Jag valde Danskebank</strong>. Du fyller bara i <a href="https://danskebank.se/sv-se/Foretag/Smaforetag/Pages/Product-packages.aspx">deras formulär</a> så ringer de upp. Danskebank sköter allt per telefon och det fungerar mycket bra. De bad inte om någon affärsplan eller budget utan litade på mig direkt. De visste också direkt vad det handlade om och de kändes pålitliga. Eftersom jag inte var kund där sedan tidigare så behövde de skicka lite papper till mig med posten först. Men inom en vecka hade jag intyget! Snabbt, enkelt, smidigt och inget meningslöst krångel.</p>
+<p>Jag valde <em>Danske Business Plus</em> för 99 kr/mån. <strong><a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> stödjer även Danskebank</strong> på så vis att man kan klistra in kontoutdraget från banken in i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a>, för att automatiskt skapa bankhändelser. Sedan matchar man dem mot leverantörsfakturor eller verifikationer.</p>
+<h1 id="hurdrivaeget">Hur Driva Eget?</h1>
+<p>Jag har lagt in återkommande händelser i Google Calendar för de olika datumen. Sedan angivit att de ska upprepas månadsvis eller, i vissa fall, årsvis. Jag lägger ungefär 2 timmar varje månad på att sköta företaget. Vad jag gör är:</p>
+<ul>
+<li>En gång per månaden
+<ul>
+<li>Importerar transaktioner från skattekontot från Skatteverket.</li>
+<li>Importerar transaktioner från företagskontot från banken.</li>
+<li>Skickar fakturor för månaden.</li>
+<li>Betalar ut lön, till anställde.</li>
+<li>Betalar skatt och avgifter till Skatteverket
+<ul>
+<li>Arbetsgivaravgift.</li>
+<li>Inkomstskatt.</li>
+<li>Debiterad preliminärskatt.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>En gång per kvartal.
+<ul>
+<li>Betalar in kvartalsmoms.</li>
+</ul>
+</li>
+<li>En gång per år.
+<ul>
+<li>Bokslut, årsredovisning, deklaration.</li>
+<li>I januari skickar in kontrolluppgit
+<ul>
+<li>Av utbetald lön för föregående år till Skatteverket.</li>
+<li>Av föregående års utdelning (KU31).</li>
+</ul>
+</li>
+<li>Lämnar K10 i privata deklarationen, om utdelning mottagits under året som deklareras.</li>
+</ul>
+</li>
+</ul>
+<p>Jag valde <strong>kvartalsmoms</strong>, alltså att jag efter varje kvartal redovisar och betalar in eventuell moms. Mer information om det finns <a href="https://www.verksamt.se/driva/skatter-och-avgifter/moms-redovisa-och-betala">här</a>. Så fort kvartalet är slut kan man lämna in deklarationen. Man har ungefär 1.5 månad på sig att lämna in den. Även för detta har Visma gjort en film som visar <a href="https://www.youtube.com/watch?v=gPv_SahMnEw">hur du gör i eEkonomi</a>. Som jag förstår det använder man kontot <em>1630</em> (eller <em>2012</em> om det är enskild firma) just för att <a href="https://forum.vismaspcs.se/visma_spcs/topics/maste-man-anvanda-sig-av-skattekontot-1630">alla händelser mot Skatteverket ska gå via detta konto</a>. Hur det fungerar med att betala, och få tillbaka moms, <a href="https://www.skatteverket.se/foretagochorganisationer/moms/deklareraochbetalamoms/betalaochfatillbakamoms.4.58d555751259e4d66168000354.html">beskriver Skatteverkets här</a>. Så kortfattat om du har <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> och kvartalsmoms så ska du vid varje kvartalsslut:</p>
+<ul>
+<li>Skapa en momsredovisning för kvartalet via bokföring / momsredovisning.</li>
+<li>Ladda ner <em>eskd</em>-filen.</li>
+<li>Skapa en <a href="https://www.skatteverket.se/foretagochorganisationer/moms/deklareraochbetalamoms.4.7459477810df5bccdd480006935.html">momsdeklaration</a> enligt <a href="https://www.youtube.com/watch?v=gPv_SahMnEw">Visma:s video</a>.</li>
+<li>Ladda upp <em>eskd</em>-filen hos <a href="https://www.skatteverket.se/foretagochorganisationer/moms/deklareraochbetalamoms/betalaochfatillbakamoms.4.58d555751259e4d66168000354.html">Skatteverket</a>.</li>
+<li>Ladda ner <a href="https://www.youtube.com/watch?v=-7cDnn-NaME">transaktioner från Skatteverket till ditt skattekonto</a> och matchar dem sedan mot momshändelsen i dina bokföringshändelser.</li>
+<li>När du senare betalat in, eller fått betalt, skapa och bokför bankhändelsen på företagskontot. Det visas i slutet på <a href="https://www.youtube.com/watch?v=gPv_SahMnEw">den här videon</a>. Tänk på att använda <em>1630</em> för AB och <em>2012</em> för enskild firma.</li>
+</ul>
+<p>Skatteverket har skickat brev till dig med datum då du ska betala <strong>debiterad preliminärskatt</strong>. Det här är något du betalar varje månad och baserar sig på din förväntade vinst som du angav i din preliminära inkomstdeklaration. Du har fått ett besked från Skatteverket där det står datum och hur mycket du ska betala. Om du har <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> kan du följa deras <a href="https://www.youtube.com/watch?v=-7cDnn-NaME">film om skattekontot</a>.</p>
+<ul>
+<li>Betala från företagskontot till företagets skattekonto.</li>
+<li>Importerar bankhändelser från företagskontot.</li>
+<li>Ladda ner <a href="https://www.youtube.com/watch?v=-7cDnn-NaME">transaktioner från Skatteverket till ditt skattekonto</a> och matchar dem sedan mot momshändelsen i dina bokföringshändelser.</li>
+<li>Importera bankhändelsen från banken till företagskontot i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a></li>
+<li>Importera bankhändelsen från Skatteverket (du kan exportera den till fil) till skattekontot i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a></li>
+<li>Matcha bankhändelsen på företagskontot mot händelsen på skattekontot. Egen kontering mellan egna bankkonton.</li>
+<li>När pengarna dragits av Skatteverket från Skattekontot, importera den händelsen.</li>
+<li>Matcha händelsen mot bokföringsförslaget <em>Debiterad preliminärskatt</em>.</li>
+</ul>
+<p>När du ska betala ut <strong>Lön</strong> behöver du betala <em>skatt</em>, <em>arbetsgivaravgift</em> samt själva <em>lönen</em>. Både <em>skatt</em> och <em>arbetsgivaravgift</em> betalas till företagets <em>skattekonto</em> så det är 2 betalningar som behöver göras från företagskontot. Om du använder <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> kan du göra såhär. Finns även en <a href="https://www.youtube.com/watch?v=ig2C9gQg2Eg">film här</a> och en <a href="https://forum.vismaspcs.se/visma_spcs/topics/bokfora-lon-i-eekonomi">bra tråd</a> om detta i supportforumet.</p>
+<ul>
+<li>Under <em>lön</em> i huvudnenyn väljer du <em>anställda</em>. Lägg upp den anställde. Du kommer behöva <em>Skattetabell</em> att använda. Den anställde kan <a href="https://www.skatteverket.se/">logga in</a> hos Skatteverket och hittar då skattetabell under &quot;Skatter och deklarationer&quot;.</li>
+<li>Under <em>lön</em> i huvudnenyn väljer du <em>lönebesked</em> och skapar ett nytt.</li>
+<li>Ange lönen och välj bokför.</li>
+<li>Logga in på banken och betala ut lönen, efter skatt, till den anställdes konto.</li>
+<li>Importera bankhändelsen till <em>företagskontot</em> via <em>kassa och bankhändelser</em>.</li>
+<li><a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> kommer föreslå att du matchar bankhändelsen mot löneutbetalningen, gör det. Nu är du klar med lönen, och nästa moment är att betala skatt och arbetsgivaravgift.</li>
+</ul>
+<p><strong>Arbetsgivardeklaration</strong> lämnas enkelt via <a href="https://www.skatteverket.se/foretagochorganisationer/arbetsgivare/lamnaarbetsgivardeklaration.4.6a6688231259309ff1f800029116.html">Skatteverkets webbsida</a>.</p>
+<ul>
+<li>Om du inte har betalat ut någon lön sätter du bara <strong>0</strong> i de obligatoriska fälten och skickar in.</li>
+<li>Om du har betalat ut lön, och använder <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a>.
+<ul>
+<li>Gå in under <em>lön</em> i huvudmenyn och välj <em>arbetsgivardeklaration</em>.</li>
+<li>Skapa ny.</li>
+<li>Välj månaden då lönen betaldes ut.</li>
+<li>Välj <em>bokför</em>.</li>
+<li>Nu kan du <a href="https://www.youtube.com/watch?v=ig2C9gQg2Eg">exportera en fil</a> om du klickar på <em>åtgärder</em> för deklarationen.</li>
+<li><a href="https://www.skatteverket.se/foretagochorganisationer/arbetsgivare/lamnaarbetsgivardeklaration.4.6a6688231259309ff1f800029116.html">Lämna in arbetsgivardeklarationen</a> hos Skatteverket genom att importera filen.</li>
+<li>På kvittensen visas ett bankgiro och OCR att använda för att betala in skatten till företagets skattekonto.</li>
+<li>Betala in summan från företagets bankkonto.</li>
+<li>Importera bankhändelsen från banken till företagskontot i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a></li>
+<li>Importera bankhändelsen från Skatteverket (du kan exportera den till fil) till skattekontot i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a></li>
+<li>Matcha bankhändelsen på företagskontot mot händelsen på skattekontot. Egen kontering mellan egna bankkonton.</li>
+<li>När pengarna dragits av Skatteverket från Skattekontot, importera den händelsen.</li>
+<li>Matcha händelsen mot bokföringsförslaget arbetsgivardeklaration. Skatteverkat drar arbetsgivardeklartionen i 2 transaktioner, du behöver <a href="https://forum.vismaspcs.se/visma_spcs/topics/hur-matchar-jag-tva-belopp-pa-skattekontot-mot-en-arbetsgivardeklaration">manuellt slå ihop dem</a> för att kunna använda det här bokföringsföslaget. Men annars är det <em>1630</em> som krediteras och <em>2710</em> (personalskatt) samt <em>2731</em> (arbetsgivaravgift) som debiteras. Jag tycker även <a href="https://www.blinfo.se/foretagskunskap/bokfora-lon__15472">den här sidan</a> är bra här.</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> har en färdig mall för <strong>fakturor</strong>. Du anger ditt företags bankgiro, och/eller kontonummer, lägger upp kunder och artiklar. Sedan kan du enkelt skapa fakturor som du sedan kan skriva ut, spara som PDF eller maila.</p>
+<p>Om du <strong>betalar ut traktamente</strong> behöver du kunna bevisa att <a href="https://www.vismaspcs.se/visma-support/visma-eget-aktiebolag/content/skattefria_traktamenten.htm">resorna ägt rum och varit tjänsteresor</a>. Därför kan det vara klokt att föra anteckningar för resor. I mitt fall åker jag alltid tåg och kommer hänvisa till tågbiljetterna om jag får revision av Skatteverket. Jag skapar exceldokument, med uträkningen, som jag sedan exporterar till PDF och sparar för att motivera traktamentet.</p>
+<p><img src="https://bjurr.com/content/images/2017/11/traktamente-utr.png" alt="Starta Eget Konsultbolag"></p>
+<p>Man hör ibland uttrycket <strong>skriva av</strong> och jag tror många missförstår det, kanske även jag =) Men jag tolkar det som att allt man köper för under ett halvt prisbasbelopp (ungefär 22 000 kr) skrivs av direkt, kostar det mer skriver man av det under flera år. Att <em>skriva av</em> innebär att man inte tar upp det som en tillgång, en inventarie, i bokföringen. Det är dock inte samma sak som att man får ge bort prylen till sig själv eller någon annan. Men jag är osäker, <a href="https://www.flashback.org/p49423662">och många med mig</a>.</p>
+<p>Att bokföra köp gjorda med <strong>kreditkort</strong> är lite speciellt men det har Visma en väldigt <a href="https://forum.vismaspcs.se/visma_spcs/topics/bokfora-inkop-med-kreditkort-i-visma-eekonomi">bra artikel</a> om.</p>
+<p>Jag sparar alltid alla <strong>kvitton</strong> direkt på Google Drive. Är det inte digitalt fotar jag av med mobilen, laddar upp bilden och sparar även original-kvittot i en pärm. I bokföringsprogrammet är jag också noga med att <strong>ladda upp bilder på varje verifikation</strong>. <a href="https://www.riksdagen.se/sv/dokument-lagar/dokument/svensk-forfattningssamling/bokforingslag-19991078_sfs-1999-1078">Bokföringslagen</a> säger att originalen ska sparas, så digitala ska sparas digitalt och de på papper sparas på papper. Jag tycker även att <a href="https://vismaspcs.se/ditt-foretagande/byra/de-har-kopiorna-behover-du-inte-skriva-ut">den här artikeln</a> beskriver det bra. Även andra dokument fotar jag av och sparar på Google Drive, som beslut från Skatteverket t.ex. Väldigt smidigt att kunna läsa allt var man än är.  Det är ganska enkelt att få tag på ett rejält brandskyddat kassaskåp (<a href="http://www.clasohlson.com/se/Dokumentsk%C3%A5p-Chubbsafes-Executive-40/Pr342428000">#1</a> eller <a href="http://www.biltema.se/sv/Hem/Sakerhet-och-larm/Sakerhetsbox/Kassaskap-brandsakert-2000033385/">#2</a>) så att man kan spara papper korrekt enligt lagstiftningen.</p>
+<p>På <strong>bokslutsdagen, sista dagen på räkenskapsåret, måste <a href="https://www.verksamt.se/driva/ekonomi-och-bokforing/lopande-bokforing">obetalda fakturor tas upp i bokföring</a></strong> även om du använder kontantmetoden. Det beskriver också Visma <a href="https://forum.vismaspcs.se/visma_spcs/topics/bokfora-inkop-med-kreditkort-i-visma-eekonomi">här</a>. Om du har skapat en faktura som ännu inte blivit betald kommer <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> att ge dig följande meddelande när du skapar sista <strong>kvartalsmomsen</strong>.</p>
+<blockquote>
+<p>Enligt Kontantmetoden ska du bokföra dina obetalda kundfordringar och leverantörsskulder vid räkenskapsårets slut och redovisa momsen. Detta kommer nu att göras automatiskt. Du bör kontrollera att alla inbetalningar och utbetalningar på året är avstämda innan du fortsätter. Vill du fortsätta?</p>
+</blockquote>
+<p>Det är viktigt att ta en extra titt på de sista transaktionerna innan räkenskapsåret är slut så att det inte dykt upp något i sista sekunden. I mitt fall hade Danskebank skapat en faktura, och dragit pengarna, för bankavgifter sista dagen i december.</p>
+<p>När räkenskapsåret är slut ska <strong>kontrolluppgifter</strong> för anställda skickas till Skatteverket. Det här gäller 2017 men är på gång att ändras så att man skickar samma uppgifter i arbetsgivardeklarationen istället. Men i <a href="https://vismaspcs.se/produkter/bokforingsprogram/visma-eekonomi">Visma eEkonomi</a> finns en funktion under <em>lön</em> i huvudmenyn som kan användas om du skapat lönespecar.</p>
+<ul>
+<li>Klicka på <em>Ny kontrolluppgift</em>.</li>
+<li>Fyll i dina uppgifter.</li>
+<li>Spara.</li>
+<li>Nu kan man ladda ner en <em>xml-fil</em> som kan laddas upp hos Skatteverket för att fylla i <em>KU10</em>-blanketten.</li>
+</ul>
+<p>Visma har en väldigt bra <a href="http://download.vismaspcs.se/pdf/bokf%C3%B6ring-f%C3%B6r-nyb%C3%B6rjare.pdf?utm_source=Eloqua&amp;utm_medium=email&amp;utm_content=SE_SP_SI_Onboarding-eEko-Std-4&amp;utm_campaign=SE_SP_SI_Onboarding-eA-Std-1704">gratis broschyr om bokföring</a>.</p>
+<h1 id="vrigt">Övrigt</h1>
+<p>Om du <strong>veckopendlar</strong> som jag så kanske du har en <strong>lägenhet på arbetsorten</strong>. Då kan man tänka sig att man <a href="http://www.skatter.se/?q=node/2619">låter bolaget betala den</a>. Jag blev rekommenderad att ta den privat och betala ut mer lön från bolaget istället. Då räknar jag på detta vid utbetalning av lön så att lön efter avdrag hamnar på gränsen för statlig skatt. Avdraget gör jag alltså i min privata deklaration. Väljer man att låta bolaget direkt betala lägenheten blir det lite krångligare med bokföring och deklaration. Det kan också vara så att Skatteverket ser det som en förmån. Så det här kändes enklast.</p>
+<p>Det finns bolag som har som <strong>affärsidé att bara ha underkonsulter</strong>. De åker på konferensresor och har gemensam kontorslokal precis som vilket annat bolag som helst. Skillnaden är bara att alla är underkonsulter. Detta bolag hjälper dig att starta ditt eget bolag och hitta kunder. De har ramavtal med stora konsultköpare och kan ordna bra timpriser. Ett sånt bolag är <a href="http://www.kvadrat.se/">Kvadrat</a>.</p>
+<p>Jag valde först att ta över kontraktet jag var på och då gå från anställd konsult till underkonsult. Senare bytte jag uppdrag och då anslöt jag mig till <a href="http://www.kvadrat.se/">Kvadrat</a>.</p>
+<p>Har du frågor om skatter så är det smidigt att man kan <a href="https://www.skatteverket.se/omoss/kontaktaoss/mejla/">maila Skatteverket</a>.</p>
+<p>Jag har skapat en facebook-grupp för att diskutera det här, går gärna med! <a href="https://www.facebook.com/groups/starta.eget.konsultbolag/">https://www.facebook.com/groups/starta.eget.konsultbolag/</a></p>
+<p>En migrering mot en egen sida är påbörjad på Github: <a href="https://tomasbjerre.github.io/starta-eget-konsultbolag/">https://tomasbjerre.github.io/starta-eget-konsultbolag/</a></p>
+<p></p><p></p>]]></content:encoded></item><item><title><![CDATA[Java Code Formatting With Google Java Format]]></title><description><![CDATA[<p>Most projects, that I work with nowadays, have a defined code standard that includes how the code should be formatted. That is great and improves code quality a lot... if followed!</p>
+<p>A single person, in the project, can lower the quality significantly by not formatting the code correctly. If such</p>]]></description><link>https://bjurr.com/java-code-formatting-with-google-java-format/</link><guid isPermaLink="false">597b4433e521cb4fbd9186a7</guid><category><![CDATA[Java]]></category><category><![CDATA[continuous-integration]]></category><category><![CDATA[tools]]></category><category><![CDATA[maven]]></category><category><![CDATA[Gradle]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sun, 11 Jun 2017 20:47:00 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/02/java.png" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/02/java.png" alt="Java Code Formatting With Google Java Format"><p>Most projects, that I work with nowadays, have a defined code standard that includes how the code should be formatted. That is great and improves code quality a lot... if followed!</p>
+<p>A single person, in the project, can lower the quality significantly by not formatting the code correctly. If such code is not blocked, from making it into shared branches, you will have the choice of keeping it or fixing it. This is a problem that I find incredibly annoying!</p>
+<ul>
+<li><em>Keeping it</em> means you have to live with faulty formatted code. If some developers use something like <em>save actions</em> in <strong>Eclipse</strong> then they will have a hard time keeping the lines unchanged when working on the file.</li>
+<li><em>Re-formatting it</em> in a new commit makes it harder to maintain the project because things like <code>git blame</code> will show the re-format commit, not the original feature commit.</li>
+</ul>
+<p>The most common solution to this, among the clients I've been working with, is to use a code style defined in <strong>Eclipse</strong>. Along with <em>save actions</em>. The code style is imported to <strong>Eclipse</strong> from an XML-file and some clients also use <a href="http://marketplace.eclipse.org/content/workspace-mechanic">Workspace Mechanics</a> to setup <em>save actions</em> properly.</p>
+<p>Defining the code style in <strong>Eclipse</strong> is a very bad idea:</p>
+<ul>
+<li>All people are not productive in <strong>Eclipse</strong>, some might for example be using <strong>InteliJ</strong> or <strong>NetBeans</strong>. They will have to have <strong>Eclipse</strong> installed just to use it for formatting.</li>
+<li>The semantics of the settings in the code style may change between versions of <strong>Eclipse</strong> (I have seen it!). Then you may start getting unnecessary diffs in commits after an upgrade.</li>
+<li>There is no way, as far as I know, to verify <strong>Eclipse</strong>-formatting as a step in a continuous integration flow. While it is easy for a reviewer to see that brackets are incorrectly positioned, other things may not be as obvious.</li>
+</ul>
+<h1 id="googlejavaformat">Google Java Format</h1>
+<p>If it is up to me, I choose <a href="https://github.com/google/google-java-format">Google Java Format</a>. Because:</p>
+<ul>
+<li>There are plugins for Gradle and Maven so that it can easily be integrated in the build process. Applied when building and verified in continuous integration.</li>
+<li>It takes all decisions regarding formatting of Java code. It can even optimize imports, sorting and removing unused imports.</li>
+<li>All decisions in this code style is carefully taken considering how diffs will appear in files where it is applied.</li>
+<li>The code style, and the tool support for that, is completely separate from any IDE used. You can let the developers use whatever IDE they want. The important thing is what they produce, the code, which should have no references to any IDE.</li>
+</ul>
+<p>I use these in different projects:</p>
+<ul>
+<li><a href="https://github.com/coveo/fmt-maven-plugin">FMT Maven Plugin</a>. You just need to add it to the <code>pom.xml</code> and it will format the code at compile time. It includes a <a href="https://github.com/coveo/fmt-maven-plugin/blob/master/src/main/java/com/coveo/FMT.java#L62">validate</a> attribute that can be used in continuous integration, perhaps with a build property, to validate that the code is formatted correctly.</li>
+<li><a href="https://github.com/sherter/google-java-format-gradle-plugin">Google Java Format Gradle Plugin</a>. You just need to add it to the <code>build.gradle</code> and it can format the code at compile time with something like <code>compileJava.dependsOn 'googleJavaFormat'</code>. It adds a <code>verifyGoogleJavaFormat</code> task to be used in continuous integration to verify formatting.</li>
+</ul>
+<p>A common problem when auto formatting coding is with newlines. I use <em>phantom comments</em> to deal with that. Just add <code>//</code> at the end of the line, like <a href="https://github.com/tomasbjerre/violations-lib/blob/master/src/main/java/se/bjurr/violations/lib/parsers/CheckStyleParser.java">this</a>, to force the formatter to keep it that way.</p>
+]]></content:encoded></item><item><title><![CDATA[Continuous Integration with GitLab and Jenkins]]></title><description><![CDATA[<p>My client recently started using GitLab. I did not find the plugins needed to properly verify merge requests. Here is what I wanted to do:</p>
+<ul>
+<li>Trigger on merge requests events.</li>
+<li>Merge, compile, test and run static code analysis on it.</li>
+<li>Report static code analysis results to GitLab.</li>
+</ul>
+<p>When fiddling with</p>]]></description><link>https://bjurr.com/continuous-integration-with-gitlab-and-jenkins/</link><guid isPermaLink="false">597b4433e521cb4fbd9186a6</guid><category><![CDATA[GitLab]]></category><category><![CDATA[Jenkins]]></category><category><![CDATA[continuous-integration]]></category><category><![CDATA[Git]]></category><dc:creator><![CDATA[Tomas Bjerre]]></dc:creator><pubDate>Sun, 12 Mar 2017 22:01:49 GMT</pubDate><media:content url="https://bjurr.com/content/images/2018/02/gitlab.jpg" medium="image"/><content:encoded><![CDATA[<img src="https://bjurr.com/content/images/2018/02/gitlab.jpg" alt="Continuous Integration with GitLab and Jenkins"><p>My client recently started using GitLab. I did not find the plugins needed to properly verify merge requests. Here is what I wanted to do:</p>
+<ul>
+<li>Trigger on merge requests events.</li>
+<li>Merge, compile, test and run static code analysis on it.</li>
+<li>Report static code analysis results to GitLab.</li>
+</ul>
+<p>When fiddling with this I came up with a Job DSL solution and a pipeline solution. Here is how they work.</p>
+<h1 id="jobdslapproach">Job DSL approach</h1>
+<p>I developed a couple of Jenkins Plugins to do this.</p>
+<ul>
+<li><a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin">Generic Webhook Trigger Jenkins Plugin</a></li>
+<li><a href="https://github.com/jenkinsci/violation-comments-to-gitlab-plugin">Violation Comments To GitLab Jenkins Plugin</a></li>
+</ul>
+<p>I also use the <a href="https://wiki.jenkins-ci.org/display/JENKINS/HTTP+Request+Plugin">HTTP Request Plugin</a> and <a href="https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin">Conditional BuildStep Plugin</a>.</p>
+<p>Here is what you need to do to use this workflow.</p>
+<p>In Jenkins:</p>
+<ol>
+<li>Install the plugins.</li>
+<li>Use the job DSL to create the job. The DSL is <a href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+GitLab+Plugin">in the wiki</a> and <a href="https://github.com/jenkinsci/violation-comments-to-gitlab-plugin">in the repo</a>.</li>
+</ol>
+<p>In GitLab:</p>
+<ol>
+<li>Create a API token. You will find it at <code>/profile/personal_access_tokens</code></li>
+<li>Add a webhook. You will find it at <code>/root/violations-test/settings/integrations</code>. Point it at <code>http://user:password@jenkins:8080/generic-webhook-trigger/invoke</code>.</li>
+<li>Make sure you are authenticated, in this request, with a user that can view any jobs that should be triggered.</li>
+</ol>
+<p>The <a href="https://gitlab.com/tomas.bjerre85/violations-test/merge_requests/1">GitLab merge request</a> will then be commented like this:<br>
+<img src="https://bjurr.com/content/images/2017/03/mergerequest-onecomment-1.png" alt="Continuous Integration with GitLab and Jenkins"></p>
+<h1 id="pipelineapproach">Pipeline approach</h1>
+<p>I just use curl, <a href="https://github.com/jenkinsci/gitlab-plugin">GitLab plugin</a> and <a href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+GitLab+Plugin">Violation Comments to GitLab Plugin</a> to implement it.</p>
+<p><img src="https://bjurr.com/content/images/2017/04/violation-pipeline.PNG" alt="Continuous Integration with GitLab and Jenkins"><br>
+Here is what you need to do to use this workflow.</p>
+<p>In Jenkins:</p>
+<ol>
+<li>Install the plugins.</li>
+<li>Create a pipeline job. The pipeline script is <a href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+GitLab+Plugin">in the wiki</a> and <a href="https://github.com/jenkinsci/violation-comments-to-gitlab-plugin">in the repo</a>.</li>
+</ol>
+<p>In GitLab:</p>
+<ol>
+<li>Create a API token. You will find it at <code>/profile/personal_access_tokens</code></li>
+<li>Add a webhook. You will find it at <code>/root/violations-test/settings/integrations</code>.</li>
+</ol>
+]]></content:encoded></item></channel></rss>

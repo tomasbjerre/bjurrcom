@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Managing 1000+ Git repositories in Jenkins with a breeze</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Managing 1000+ Git repositories in Jenkins with a breeze" />
+    <meta property="og:description" content="This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount of repositories! I am exclusively involved in Java projects. This post will sometimes assume Maven is being" />
+    <meta property="og:url" content="https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2018/02/superhero-1.png" />
+    <meta property="article:published_time" content="2018-02-03T06:39:55.000Z" />
+    <meta property="article:modified_time" content="2019-01-21T18:44:05.000Z" />
+    <meta property="article:tag" content="Jenkins" />
+    <meta property="article:tag" content="pipeline" />
+    <meta property="article:tag" content="continuous-integration" />
+    <meta property="article:tag" content="Git" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Managing 1000+ Git repositories in Jenkins with a breeze" />
+    <meta name="twitter:description" content="This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount of repositories! I am exclusively involved in Java projects. This post will sometimes assume Maven is being" />
+    <meta name="twitter:url" content="https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2018/02/superhero-1.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Jenkins, pipeline, continuous-integration, Git" />
+    <meta property="og:image:width" content="320" />
+    <meta property="og:image:height" content="310" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Managing 1000+ Git repositories in Jenkins with a breeze",
+    "url": "https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/",
+    "datePublished": "2018-02-03T06:39:55.000Z",
+    "dateModified": "2019-01-21T18:44:05.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2018/02/superhero-1.png",
+        "width": 320,
+        "height": 310
+    },
+    "keywords": "Jenkins, pipeline, continuous-integration, Git",
+    "description": "This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount of repositories! I am exclusively involved in Java projects. This post will sometimes assume Maven is being",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-jenkins tag-pipeline tag-continuous-integration tag-git">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-jenkins tag-pipeline tag-continuous-integration tag-git ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2018-02-03">3 February 2018</time>
+                        <span class="date-divider">/</span> <a href="/tag/jenkins/">Jenkins</a>
+                </section>
+                <h1 class="post-full-title">Managing 1000+ Git repositories in Jenkins with a breeze</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2018/02/superhero-1.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>This is a pattern that I find simple, easy/quick while still keeping you in control of your build flow. Should be no problem applying it in an organization with a huge amount of repositories!</p>
+<p>I am exclusively involved in <strong>Java projects</strong>. This post will sometimes assume <em>Maven</em> is being used. But it can probably inspire a solution in other projects too. I will not supply the complete running code. I'm just going to include small snippets and focus on explaining the general idea.</p>
+<p>Some of this is implemented with Jenkins Configuration as Code, here:<br>
+<a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></p>
+<h1 id="problems">Problems</h1>
+<p>Splitting a big application into several smaller artifacts is a good thing! To me, that is obvious but still I find myself talking to people that don't agree on that. Here are some of the arguments I hear on why not to split applications.</p>
+<blockquote>
+<p>&quot;I want to build whatever I have checked out, locally, on my filesystem. We will need to spend many frustrating hours stepping dependencies between artifacts.&quot;</p>
+</blockquote>
+<blockquote>
+<p>&quot;It is hard to detect when artifacts no longer fit together. We will find severe problems late because we don't continuously integrate all the artifacts.&quot;</p>
+</blockquote>
+<blockquote>
+<p>&quot;We will need a huge amount of jobs in Jenkins (releasing, testing, integrating, deploying, snapshots...). We will need to spend much time managing them.&quot;</p>
+</blockquote>
+<p>Ok! All valid points! And <strong>all of them are more or less show stoppers if you don't do continuous integration right!</strong></p>
+<h1 id="solution">Solution</h1>
+<p>In short, I propose a solution where you:</p>
+<ul>
+<li>Define a clear branching strategy.</li>
+<li>Define a translation strategy between branch and Maven artifact version.</li>
+<li>Define how any given repo should be built.</li>
+<li>Automate and define how repos depend on each other.</li>
+<li>Add a <em>Jenkinsfile</em> to each repo.</li>
+<li>Create a <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">shared pipeline library</a>.</li>
+<li>Automate the creation of the jobs.</li>
+</ul>
+<p>You might consider <a href="https://wiki.jenkins.io/display/JENKINS/Pipeline+Multibranch+Plugin">Pipeline Multibranch Plugin</a>. I use <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">Job DSL</a> and <a href="https://plugins.jenkins.io/cloudbees-folder">Folders Plugin</a>. I have it create ordinary <a href="https://jenkins.io/doc/book/pipeline/">pipeline</a>-jobs in a folder structure with a folder for each repository.</p>
+<ul>
+<li>It gives me something static, the name of each job, to use when chaining jobs that depend on each other. There is a folder for each repository and it contains the jobs.</li>
+<li>It also allows several jobs to work with the same branch. I can easily create a release-job and a snapshot-job that both work with the <em>develop</em> branch.</li>
+</ul>
+<p>You could have a static release-job and use mutlibranch to dynamically create every other job. But still, I feel I have more control with <em>Job DSL</em> and I feel it makes Jenkins look more organized.</p>
+<h2 id="branchingstrategy">Branching strategy</h2>
+<p>You must know the meaing of the branches, in any given repo, in order to automate things. A defined branching strategy enables you to:</p>
+<ul>
+<li>Clone any given repo.</li>
+<li>Detect what branches exists.</li>
+<li>Be sure which branch to use for <em>snapshots</em> or <em>releases</em>.</li>
+</ul>
+<p>If your strategy is <a href="https://bjurr.com/gitflow-and-when-you-should-use-it/">GitFlow</a>, then:</p>
+<ul>
+<li>The <em>snapshot</em>-job will
+<ul>
+<li>Build snapshots from <em>develop</em>.</li>
+<li>Step dependencies in <em>develop</em>.</li>
+</ul>
+</li>
+<li>The <em>release</em>-job will
+<ul>
+<li>Build releases from <em>hotfix</em> if it exists or else  <em>release</em>.</li>
+</ul>
+</li>
+<li>The <em>feature</em>-job will build any <em>feature/X</em>-branches.</li>
+</ul>
+<p>Each repository has one release-cycle. Several artifacts, in the same repo, with different release-cycles are not allowed.</p>
+<h2 id="branchtoversiontranslation">Branch to version translation</h2>
+<p>The integration between the Git service and Jenkins is setup so that when a commit is pushed to a feature-branch:</p>
+<ul>
+<li>A job is triggered.</li>
+<li>The branch name is identified.</li>
+<li>A version is derived form the branch name.</li>
+<li>Check to see if there is global a <code>bom</code> with that version
+<ul>
+<li>If no <code>bom</code> fall back to some default, fail or automate creation of that ´bom´-version.</li>
+</ul>
+</li>
+<li>The artifacts are built, with a <code>bom</code> with the version, and uploaded to a Maven repository.</li>
+</ul>
+<p>The <code>bom</code> -repo may function in the same way. Developers branch out of <em>develop</em>, getting all default versions. They set specific versions for some artifacts and commit/push. Or you automate that same procedure whenever a <code>bom</code>-version is missing. Then the artifact that originally triggered the creation of that bom can find its version and set it to itself.</p>
+<p>Then it will be possible to automatically create <em>deploy</em>-jobs for any &quot;deployaple&quot; repository. Where a dropdown list can automatically be populated with features. Features are found by listing feature-branches and translating to versions.</p>
+<p>Developers won't have to fiddle with versions locally, they just have whatever version that is also in <em>develop</em>-branches. And can clone a bunch of repos, built locally, and work with that fitting together.</p>
+<h2 id="building">Building</h2>
+<p>You must know how to build any given repo. With Maven, the aggreement might be as simple as:</p>
+<ul>
+<li>The project is built from the root of the repo.</li>
+<li>The version, of the repository, is specified in the root of the repo. When using Maven, it is the version of the <em>pom.xml</em>.</li>
+<li>Different Maven profiles are allowed. Any profiles that produces artifacts should be specified as metadata about the repo in the <em>Jenkinsfile</em>.</li>
+</ul>
+<p>The important thing is to define these rules. Do not start treating specific repos differently in the global build scripts. Instead specify global rules that all repos should follow.</p>
+<h2 id="dependingrepositories">Depending repositories</h2>
+<p>To be able to automatically chain jobs and have them trigger each other, I need to know <em>depending repos</em> of each repo. The opposite of what you have in <code>pom.xml</code>.</p>
+<p>One way of doing that is with a job that:</p>
+<ul>
+<li>Regularly finds all repos, perhaps via the Git service REST-API.</li>
+<li>Parse the <code>pom.xml</code>-files.
+<ul>
+<li>Find out what <code>artifacts</code> are contains in what repos.</li>
+<li>Find out what <code>artifacts</code> are used in what repos.</li>
+</ul>
+</li>
+<li>Create a structure with the depending repos per repo.</li>
+<li>Optimize that structure so that transitive dependencies are removed from list of direct dependencies.</li>
+<li>Store that structure as a json text -file in a repo. Making it available for snapshot/release-jobs to clone and include.</li>
+</ul>
+<p>Having this information pre-calculated saves alot of time when it is needed by some job.</p>
+<p>Perhaps the depending repo structure can look something like this.</p>
+<pre><code>{
+ ...
+ &quot;PROJECT-A/example-repo-d&quot;: [
+  &quot;PROJECT-B/example-repo-b&quot;,
+  &quot;PROJECT-C/example-repo-d&quot;
+ ],
+ &quot;PROJECT-C/example-repo-d&quot;: [
+  &quot;PROJECT-E/example-repo-b&quot;
+ ]
+ ...
+}
+</code></pre>
+<h2 id="jenkinsfile">Jenkinsfile</h2>
+<p>It is very small and contains only metadata about the repo. This is just like <a href="https://github.com/jenkins-infra/pipeline-library/blob/master/vars/buildPlugin.groovy">Jenkins Infra</a> handles their 1000+ plugins.</p>
+<p>When using Maven, you might want to specify <em>profiles</em> to be built.</p>
+<p>A repo that needs to be built, nothing else, may look like this:</p>
+<pre><code>buildRepo()
+</code></pre>
+<p>It may specify profiles:</p>
+<pre><code>buildRepo(
+ profiles: [
+  'profile1'
+ ]
+)
+</code></pre>
+<p>And if a profiles are needed as well as no profile, it may look like:</p>
+<pre><code>buildRepo(
+ profiles: [
+  '',
+  'profile1'
+ ]
+)
+</code></pre>
+<p>This is all there is in the repositories. Only one <em>Jenkinsfile</em> and this is the only information it contains. I'm not saying you only need this. I'm just recommending to keep it light! Perhaps you invent thnkgs like <code>deployable: true</code> or <code>autoDeployEnv: 'TEST-XY'</code>...</p>
+<h2 id="sharedlibrary">Shared library</h2>
+<p>A <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">shared pipeline library</a> allows you to, only once, define how to do releases, snapshots and all other tasks.</p>
+<p>With the above <em>Jenkinsfile</em> there should be a <code>/vars/buildRepo.groovy</code> containing something like:</p>
+<pre><code>...
+def call(Map params = [:]) {
+...
+ if (JOB_BASE_NAME.equals(&quot;snapshot&quot;)) {
+ ...
+ } else if (JOB_BASE_NAME.equals(&quot;release&quot;)) {
+ ...
+ }
+...
+}
+...
+</code></pre>
+<h2 id="automatecreationofjobs">Automate creation of jobs</h2>
+<p>Most Git services (GitHub, GitLab, Bitbucket...) provide REST API:s. You can use that to automate creation/deletion/adjustment of jobs and always be in sync with the repos you have in your Git service. The job DSL would loop through all repositories.</p>
+<pre><code>...
+ folder(&quot;gen&quot;) {
+  displayName(&quot;Generated jobs&quot;)
+  description(&quot;&quot;&quot;
+   These are generated by ${JOB_URL}
+  &quot;&quot;&quot;)
+ }
+
+ getJson(server+ &quot;/rest/request/to/repos...&quot;)
+  .values
+  .each { repo -&gt;
+  folder(&quot;gen&quot;) {
+   displayName(&quot;gen/&quot; + repo.name)
+   description(&quot;&quot;&quot;
+    Generated by ${JOB_URL}
+   &quot;&quot;&quot;)
+  }
+
+  pipelineJob(&quot;gen/&quot; + repo.name + &quot;/snapshot&quot;) {
+...
+</code></pre>
+<h2 id="templates">Templates</h2>
+<p>I use the <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">Job DSL</a> plugin. Perhaps you want these jobs for every repository:</p>
+<ul>
+<li><em>snapshot</em></li>
+<li><em>release</em></li>
+<li><em>feature</em></li>
+<li><em>pull-request</em></li>
+</ul>
+<p>Also a global job, <em>release-orchestration</em>.</p>
+<p>All of these templates are pipelines. Their logic is implemented in the shared library. The shared library will find the Git repo to use from <code>scm.getUserRemoteConfigs().get(0).getUrl()</code> and the kind of job to build from <code>JOB_BASE_NAME</code>.</p>
+<h3 id="snapshot">Snapshot</h3>
+<p>This job will:</p>
+<ul>
+<li>Make sure <em>develop</em> is using latest dependencies (<a href="http://www.mojohaus.org/versions-maven-plugin/update-properties-mojo.html">found in Maven repository</a>). If there are newer versions:
+<ul>
+<li>Step dependencies to latest version.</li>
+<li>Commit changes.</li>
+<li>Push changes.</li>
+<li>Re-trigger self, to help Jenkins understand that this new commit does not need to be built again. Done.</li>
+</ul>
+</li>
+<li>Build a snapshot version.</li>
+<li>Upload snapshot-version to Maven repository.</li>
+<li>Trigger <em>dependingRepos</em> configured in <em>Jenkinsfile</em>.</li>
+<li>Done.</li>
+</ul>
+<p>When using Maven, you can do this with <a href="http://www.mojohaus.org/versions-maven-plugin/">Versions Maven Plugin</a>.</p>
+<h3 id="release">Release</h3>
+<p>This job will:</p>
+<ul>
+<li>Start from commit <em>C1</em>.</li>
+<li>Set dependencies to latest released versions.</li>
+<li>Step version to next release-version.</li>
+<li>Make a commit <em>C2</em>.</li>
+<li>Set dependencies to latest snapshots.</li>
+<li>Step version to next snapshot-version.</li>
+<li>Make a commit <em>C3</em>.</li>
+<li>Try to push changes. If not successful:
+<ul>
+<li>Hard reset to <em>C1</em>.</li>
+<li>Pull.</li>
+<li>Start again with creating <em>C2</em>.</li>
+<li>Do this loop, perhaps 5 times before giving up and fail.</li>
+</ul>
+</li>
+</ul>
+<p>This allows developers to work in the branches during the release-process.</p>
+<p>Now that we know we are in sync with remote Git repo on where to perform the release, we can continue doing so.</p>
+<ul>
+<li>Tag <em>C2</em> with the release-version.</li>
+<li>Perform the build commands, <code>mvn package</code> and loop any profiles needed.</li>
+<li>Deploy in Maven repository, <code>mvn deploy</code>.</li>
+</ul>
+<p>When using Maven, you can do this with <a href="http://www.mojohaus.org/versions-maven-plugin/">Versions Maven Plugin</a>.</p>
+<h3 id="releaseorchestration">Release orchestration</h3>
+<p>This job will:</p>
+<ul>
+<li>Orchestrates a release.</li>
+<li>Is parameterized with each repo.</li>
+<li>When triggered:
+<ul>
+<li>Calculates the order to release selected repos. With the information found in their <em>Jenkinsfile</em>:s.</li>
+<li>Invokes the <em>release</em>-jobs of each selected repo.</li>
+</ul>
+</li>
+</ul>
+<h1 id="features">Features</h1>
+<p>Here is what features this setup can provide and how I intend them to be used.</p>
+<h2 id="release">Release</h2>
+<p>A release of a single repo can be performed from its <em>release</em>-job.</p>
+<p>This will look at each repo and release from the branch that is first found in this order:</p>
+<ol>
+<li><em>hotfix</em></li>
+<li><em>release</em></li>
+<li><em>develop</em></li>
+<li><em>master</em></li>
+</ol>
+<p>So if you want to release from a specific commit, not latest <em>develop</em>, just push a <em>release</em>, or <em>hotfix</em>, -branch that points to that commit.</p>
+<h3 id="orchestratingarelease">Orchestrating a release</h3>
+<p>A release of one, or more, repos can be performed from the global <em>release-orchestration</em>-job. This will:</p>
+<ul>
+<li>Ensure the release of each repo
+<ul>
+<li>Is done in the right order.</li>
+<li>Their dependencies will be released first, if selected.</li>
+<li>Use the latest release of their dependencies.</li>
+</ul>
+</li>
+<li>After release, trigger the snapshot-job of the first repo that was released. So that all the snapshot-jobs will run and step snapshot-versions.</li>
+</ul>
+<p>It will invoke the release-jobs of each repo. This means you can have a look there for more details on that specific release.</p>
+<h2 id="hotfix">Hotfix</h2>
+<p>Having the priority among branches, mentioned above, will enable you to push a <em>hotfix</em>-branch from any commit and have the release being performed from that commit. If your <em>master</em> points to latest installed version:</p>
+<ul>
+<li><code>git checkout master</code></li>
+<li><code>git checkout -b hotfix</code></li>
+<li><code>git push -u origin hotfix</code></li>
+</ul>
+<p>Then just trigger the release.</p>
+<h1 id="advantages">Advantages</h1>
+<p>Your entire <strong>Jenkins configuration is put under version control</strong>. Well... you need to create one Job DSL -job manually that polls, or is triggered by changes in, the git service. But that job can have its DSL in a Git-repo. This has a bunch of advantages.</p>
+<ul>
+<li>No more browsing around in Jenkins and fiddling with settings.</li>
+<li>You can track changes in the jobs. Just use <code>git blame</code>, it is all code now!</li>
+<li>All your jobs are backed up with Git.</li>
+<li>You can easily setup a development instance of Jenkins that behaves very much like your production instance.</li>
+<li>You can generate release-jobs in one Jenkins and snapshot jobs in another. Letting only a few people use the release-jenkins and anyone use the other instance.</li>
+</ul>
+
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/jenkins/">Jenkins</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/release-from-jenkins-by-pushing-git-tags/">Release from Jenkins by pushing Git tags</a></li>
+                            <li><a href="/jenkins-configuration-as-code-and-gitlab/">Jenkins Configuration as Code and GitLab</a></li>
+                            <li><a href="/jenkins-integration-on-steroids/">Jenkins Integration on Steroids</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/jenkins/">See all 9 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-jenkins tag-pipeline tag-continuous-integration tag-git tag-tools tag-gitlab tag-github tag-bitbucket-server tag-stash">
+        <a class="post-card-image-link" href="/jenkins-integration-on-steroids/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/04/superhero.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/jenkins-integration-on-steroids/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Jenkins</span>
+                <h2 class="post-card-title">Jenkins Integration on Steroids</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Parameterized jobs in Jenkins is nothing new. But integrating with services like GitHub is much more than just accepting some GET parameters. Generic Webhook Trigger aims at simplifying triggering of jobs from complex</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">4 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-gradle tag-java">
+        <a class="post-card-image-link" href="/sharing-gradle-build-scripts-cross-repositories/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/5847fb12cef1014c0b5e48d1.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/sharing-gradle-build-scripts-cross-repositories/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Gradle</span>
+                <h2 class="post-card-title">Sharing Gradle build scripts across repositories</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>While migrating my OSS from Maven Central to Bintray I realized I had a lot of duplicated Gradle scripts in different repos. I found some alternatives on how to share build scripts across</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">1 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Managing 1000+ Git repositories in Jenkins with a breeze</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Managing%201000%2B%20Git%20repositories%20in%20Jenkins%20with%20a%20breeze&amp;url=https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/managing-1000-repos-in-jenkins-with-a-breeze/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

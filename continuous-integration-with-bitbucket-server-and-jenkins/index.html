@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Continuous Integration with Bitbucket Server and Jenkins</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Continuous Integration with Bitbucket Server and Jenkins" />
+    <meta property="og:description" content="I have started several projects where I develop plugins for Bitbucket Server and Jenkins. They are independent of each other but I thought it would be nice to have a blog post about how they can work together and on how I prefer to do continuous integration. This is it!" />
+    <meta property="og:url" content="https://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2018/02/0722.sdt-atlassian.png" />
+    <meta property="article:published_time" content="2016-09-10T08:07:34.000Z" />
+    <meta property="article:modified_time" content="2018-08-31T05:51:39.000Z" />
+    <meta property="article:tag" content="Jenkins" />
+    <meta property="article:tag" content="GitHub" />
+    <meta property="article:tag" content="Bitbucket Server" />
+    <meta property="article:tag" content="Static Code Analysis" />
+    <meta property="article:tag" content="Git" />
+    <meta property="article:tag" content="Plugins" />
+    <meta property="article:tag" content="continuous-integration" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Continuous Integration with Bitbucket Server and Jenkins" />
+    <meta name="twitter:description" content="I have started several projects where I develop plugins for Bitbucket Server and Jenkins. They are independent of each other but I thought it would be nice to have a blog post about how they can work together and on how I prefer to do continuous integration. This is it!" />
+    <meta name="twitter:url" content="https://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2018/02/0722.sdt-atlassian.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Jenkins, GitHub, Bitbucket Server, Static Code Analysis, Git, Plugins, continuous-integration" />
+    <meta property="og:image:width" content="248" />
+    <meta property="og:image:height" content="248" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Continuous Integration with Bitbucket Server and Jenkins",
+    "url": "https://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/",
+    "datePublished": "2016-09-10T08:07:34.000Z",
+    "dateModified": "2018-08-31T05:51:39.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2018/02/0722.sdt-atlassian.png",
+        "width": 248,
+        "height": 248
+    },
+    "keywords": "Jenkins, GitHub, Bitbucket Server, Static Code Analysis, Git, Plugins, continuous-integration",
+    "description": "I have started several projects where I develop plugins for Bitbucket Server and Jenkins. They are independent of each other but I thought it would be nice to have a blog post about how they can work together and on how I prefer to do continuous integration. This is it!",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-jenkins tag-github tag-bitbucket-server tag-static-code-analysis tag-git tag-plugins tag-continuous-integration">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-jenkins tag-github tag-bitbucket-server tag-static-code-analysis tag-git tag-plugins tag-continuous-integration ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2016-09-10">10 September 2016</time>
+                        <span class="date-divider">/</span> <a href="/tag/jenkins/">Jenkins</a>
+                </section>
+                <h1 class="post-full-title">Continuous Integration with Bitbucket Server and Jenkins</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2018/02/0722.sdt-atlassian.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>I have started several projects where I develop plugins for Bitbucket Server and Jenkins. They are independent of each other but I thought it would be nice to have a blog post about how they can work together and on how I prefer to do continuous integration. This is it! =)</p>
+<p>What is the configuration that I apply?</p>
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">Gitflow</a> workflow.</li>
+<li>Every commit, message and code, has to be reviewed before it can be merged.</li>
+<li>Every commit has to have an issue in its message.</li>
+<li>The size of the files that are put under version control cannot exceed 2000kb.</li>
+<li>The committer must use valid name and email in all commits.</li>
+<li>Changes can only be made with <em>feature branches</em> and merged with <em>pull requests</em>.</li>
+<li><em>Pull requests</em> cannot be merged unless it its guaranteed that the target branch will still build after merge.</li>
+<li><em>Pull requests</em> cannot be merged unless, at least, one other developer has reviewed it.</li>
+<li><em>Static code analysis</em> will be made on every <em>pull request</em>.</li>
+</ul>
+<p>Why do I apply this configuration?</p>
+<ul>
+<li><strong>Git flow enables you to</strong>
+<ul>
+<li>Use plugins for managing releases, like <a href="https://bitbucket.org/atlassian/jgit-flow/wiki/Home">JGit-Flow</a>.</li>
+<li>Reduce time spent on documentation. You just need to refer to some <a href="https://www.youtube.com/results?search_query=git+flow">youtube-videos</a> or <a href="http://lmgtfy.com/?q=git+flow">websites</a>.</li>
+<li>Discuss any scenario on any public forum like <a href="http://stackoverflow.com/search?q=git+flow">Stackoverflow</a>.</li>
+<li>Let a configuration manager have total control of <em>master</em> and <em>release</em>-branches. While developers have total control of <em>dev</em> and <em>feature</em>-branches.</li>
+<li>Some people skip <em>dev</em> and use <em>master</em> as developer branch. I keep <em>dev</em> because when developing tools around GIT, its convenient to have a reference to latest release, <em>master</em>, and latest snapshot, <em>dev</em>. And since branches in git are basically just a file with a hash I think its a small price to pay for keeping it nice and tidy.</li>
+</ul>
+</li>
+<li><strong>You will know exactly what is included in your releases</strong>. The commits are reviewed, so you can trust that the message is true. Which means you can create your release notes by looking at the new commits in <em>dev</em> that are not yet merged to <em>master</em> (production). A special QA-jira is created to use for small fixes, like correcting toggling test case or formatting code.</li>
+<li><strong>You will make the code more maintainable and share knowledge among developers</strong>. When tracking down a bug, the commit messages you find will be clear and understandable. Also the code will be cleaner from the reviews. Duplicated utility classes, diverging patterns... and so on will be denied.</li>
+<li><strong>You will never have a failing build on a shared branch</strong>. Merge is only allowed, blocked by the Bitbucket Server, if it is guaranteed that target will still build after merge. Actually, if you have toggling test cases they can fail. But that should be found in code reviews.</li>
+<li><strong>Testers can pick a feature and try it out in a test environment before its merged to <em>dev</em></strong>. By letting <em>Jenkins</em> perform the merge (without pushing), build the artifacts and deploy to an environment.</li>
+<li><strong>Your static code analysis will be honored</strong>. You will see dramatically reduced amount of warnings from static code analysis. The developers will not be able to ignore such warnings (often the case with <em>Sonar</em>) as they will automatically be converted into comments on the code in the <em>pull request</em>.</li>
+<li><strong>Your repository will not quickly increase in size</strong>. Remember that when you clone a Git repo you will download every version of everything. Its mostly a one time thing for a developer but something that a build server does several times a day. Once your repo has grown big its a bit of a pain getting rid of those large files.</li>
+</ul>
+<p>And finally, how do I apply the configuration? With Jenkins, Bitbucket Server (some of this is also possible to do if you are using GitHub) and plugins! I created a small <a href="https://github.com/tomasbjerre/jenkinsbitbucket">Docker Compose</a> to help fiddle with this.</p>
+<h1 id="bitbucketserver">Bitbucket Server</h1>
+<p>This is the Git repo that I use. It adds some things that Git does not have:</p>
+<ul>
+<li>Authentication.</li>
+<li>Branch, repo and project permissions.</li>
+<li>Pull request support.</li>
+<li>Code review support.</li>
+<li>Alot of plugins.</li>
+</ul>
+<p>The plugins I will use adds support for:</p>
+<ul>
+<li>Commit checks with <a href="https://marketplace.atlassian.com/plugins/se.bjurr.sscc.sscc/server/overview">Simple Bitbucket Server Commit Checker</a>.</li>
+<li>Notifies Jenkins to perform verification of pull requests with <a href="https://marketplace.atlassian.com/plugins/se.bjurr.prnfs.pull-request-notifier-for-stash/server/overview">Pull Request Notifier for Bitbucket Server</a>.</li>
+<li>Synchronizing settings among repositories with <a href="https://marketplace.atlassian.com/plugins/se.bjurr.ssfb.settings-synchronizer-for-bitbucket/server/overview">Settings Synchronizer for Bitbucket Server</a></li>
+</ul>
+<p>You can think about Git as an open database. Anyone can change anything. Anyone can add commits to any branch, with any author/committer name/email. It is very dangerous to collaborate around a repo that is not protected with a service like Bitbucket Server.</p>
+<h2 id="simplebitbucketservercommitchecker">Simple Bitbucket Server Commit Checker</h2>
+<p>This is one of my plugins. Its available for easy install from <a href="https://marketplace.atlassian.com/plugins/se.bjurr.sscc.sscc/server/overview">Atlassian Marketplace</a> and is developed <a href="https://github.com/tomasbjerre/simple-bitbucket-commit-checker">on Github</a>.</p>
+<p>The main reason why I developed this plugin was to allow custom rejection messages. The rejection messages also allows you to use variables so that you can reject a commit with a message saying exactly what the committer needs to do in order to fixup the commit. It also has a <em>dry run</em> mode where it only complains about the things that are not correct, but does not actually block the commit. It may be crucial to have such a feature if you introduce commit checks for 100+ committers.</p>
+<p><img src="/content/images/2016/09/sscc-email.png" alt="Block committer emails not in Bitbucket Server"></p>
+<p>The rejection messages are very clear.</p>
+<p><img src="/content/images/2016/09/sscc-reject.png" alt="Email rejected"></p>
+<p>It uses Jira:s <a href="https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html#Advancedsearching-ConstructingJQLqueries">JQL</a> to enable advanced and flexible validation of commit comments. It does not have to be an advanced query, simply adding <code>issue = ${REGEXP}</code> will validate that the Jiras exists.</p>
+<p><img src="/content/images/2016/09/sscc-issues.png" alt="JQL"></p>
+<p>I use it to block commits:</p>
+<ul>
+<li>Contains files that are too big, larger then 2000kb.</li>
+<li>Committer email or name does not match authenticated user in Bitbucket Server.</li>
+<li>Message does not contain an issue. Jira or custom incident pattern. I create a special issue in jira, a QA-jira, that can be use for small fixes. A small fix might be correcting toggling test case or formatting code.</li>
+</ul>
+<h2 id="pullrequestnotifierforbitbucketserver">Pull Request Notifier for Bitbucket Server</h2>
+<p>This is one of my plugins. Its available for easy install from <a href="https://marketplace.atlassian.com/plugins/se.bjurr.prnfs.pull-request-notifier-for-stash/server/overview">Atlassian Marketplace</a> and is developed <a href="https://github.com/tomasbjerre/pull-request-notifier-for-bitbucket">on Github</a>.</p>
+<p>It invokes a URL when a pull request event happens in Bitbucket Server. The URL is completely customizable and supports variables so that you can notify any system with the information it needs on the format it needs it.</p>
+<p><img src="/content/images/2016/09/pull-request-notifier-url-config.png" alt="Pull Request Notifier for Bitbucket Server URL config"></p>
+<p>The main reason why I developed this plugin was to allow perfect verification of pull requests in Jenkins. But it is written in a way so that it is in no way limited to Jenkins. It basically just interacts with HTTP and can be used for many other purposes. I know people use it for posting updates regarding pull requests in Slack channels.</p>
+<p>It enables you to guarantee that pull requests cannot be merged unless target branch will still build after the merge. If one of several pull requests to <em>dev</em> is merged, the plugin can re-trigger all other pull requests to verify them with the new commit that is now <em>dev</em>.</p>
+<p>It adds support for <em>custom buttons</em> on pull request view. These buttons are mapped to a <em>notifications</em> (a URL being invoked). This means you can have a button labeled &quot;<em>Deploy to test env 1</em>&quot; and when it is pressed you trigger a job in Jenkins. The job is served with the feature branch of the pull request, builds the artifact and deploys it to that environment.</p>
+<p><img src="/content/images/2016/09/prnfb-buttons.png" alt="Pull Request Notifier for Bitbucket Server Button Config"></p>
+<p>And in the pull request view you will see that button to the right, when clicking the dots.</p>
+<p><img src="/content/images/2016/09/prnfb-button-pr-view.png" alt="Pull Request Notifier for Bitbucket Server Button In PR view"></p>
+<p>The button will only be made visible if there is a configured notification that will actually trigger on the button being pressed. So make sure you add that also.</p>
+<p><img src="/content/images/2016/09/prnfb-triggers.png" alt="Pull Request Notifier for Bitucket Server Triggers"></p>
+<h2 id="settingssynchronizerforbitbucketserver">Settings Synchronizer for Bitbucket Server</h2>
+<p>This is one of my plugins. Its available for easy install from <a href="https://marketplace.atlassian.com/plugins/se.bjurr.ssfb.settings-synchronizer-for-bitbucket/server/overview">Atlassian Marketplace</a> and is developed <a href="https://github.com/tomasbjerre/settings-synchronizer-for-bitbucket-plugin">on Github</a>.</p>
+<p>It is a bit of a pain to configure plugins for a 100, or even just a couple, of repositories. This plugin lets you synchronize plugin settings among your repositories.</p>
+<p><img src="/content/images/2016/10/repoadmin.png" alt="Settings Synchronizer for Bitbucket Server"></p>
+<h1 id="jenkins">Jenkins</h1>
+<p>The build server that I use. Some say its just a glorified cron job. And yes thats pretty much it. The good thing about it is all the plugins. I dont think I would ever use it if it was not for the plugins.</p>
+<p>When I verify the pull requests I do it with a simple shell script build step.</p>
+<ul>
+<li>From <a href="https://github.com/tomasbjerre/pull-request-notifier-for-bitbucket">Pull Request Notifier for Bitbucket Server</a> I pass the <code>${EVERYTHING_URL}</code>.</li>
+<li>I check the job as parameterized and add the variables, used below, ass parameters.</li>
+<li>I check delay and set it to 0 seconds.</li>
+<li>I check allow parallel jobs.</li>
+</ul>
+<p>The script is something like this.</p>
+<pre><code>git clone $PULL_REQUEST_TO_HTTP_CLONE_URL
+cd *  
+git reset --hard $PULL_REQUEST_TO_HASH
+git status  
+git remote add from $PULL_REQUEST_FROM_HTTP_CLONE_URL
+git fetch --all
+git merge $PULL_REQUEST_FROM_HASH
+git --no-pager log --max-count=10 --graph --abbrev-commit
+
+#compile command here ...
+</code></pre>
+<h2 id="violationcommentstobitbucketserverplugin">Violation Comments to Bitbucket Server Plugin</h2>
+<p>This is one of my Jenkins plugins. It is available in <a href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+Bitbucket+Server+Plugin">Jenkins update sites</a> and is developed <a href="https://github.com/jenkinsci/violation-comments-to-stash-plugin">on Github</a>. There is also a <a href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+Github+Plugin">Jenkins plugin for Github</a> if that is what you are using.</p>
+<p>My opinion is that projects often put to much trust in that developers themselves will adhere to rules specified by static code analysis tools. They often trust that developers will have their IDE setup correctly to report problems. They also trust that developers will browse to <a href="http://www.sonarqube.org/">SonarQube</a>, every now and then, and find problems to fix. It is my strongest opinion that this never works. Some developers are really enthusiastic about it in the beginning but soon forgets to check for problems. Some never even cares in the first place. Commenting the pull requests with the problems found, makes them hard to ignore.</p>
+<p>When a pull request is verified, part of the verification is static code analysis. This plugin finds report files generated from that analysis and uses them to comment the pull request in Bitbucket Server.</p>
+<p><img src="/content/images/2016/09/screenshot-stash.png" alt="Violation Comments to Bitbucket Server"></p>
+<p>The post build action may look something like this.</p>
+<p><img src="/content/images/2016/09/violation-comments-to-bitbucket.png" alt="Violation Comments to Bitbucket Server Post Build Action"></p>
+<h2 id="gitchangelogplugin">Git Changelog Plugin</h2>
+<p>This is one of my Jenkins plugins. It is available in <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Changelog+Plugin">Jenkins update sites</a> and is developed <a href="https://github.com/jenkinsci/git-changelog-plugin">on Github</a>.</p>
+<p>There may be several commits in the feature branch that is the source of the pull request. It may be an integration branch where developers has been working for weeks or even months. Then its very nice get a more organized view of what the feature branch actually contains.</p>
+<p><img src="/content/images/2016/09/git-changelog-postaction1.png" alt="Git Changelog Jenkins Plugin Configuration"></p>
+<p>This plugin is configured with a template and then creates a changelog where the template is rendered with the content of the feature branch.</p>
+<p><img src="/content/images/2016/09/git-changelog-postaction2.png" alt="Git Changelog Jenkins Plugin Template Configuration"></p>
+<p>It may look something like this if you chose to publish it on Jenkins job summary page. I used a Github repo here in the example because I dont have access to a Jira installation, but it works just the same with Jira! =)</p>
+<p><img src="/content/images/2016/09/gitchangelog-prnfb-github.png" alt="Git Changelog Jenkins Summary"></p>
+<p>You can also use this plugin to create release notes, just select <em>dev</em> as source branch and <em>master</em> as target branch. If you have a Jenkins job for <em>dev</em> then that is where to put that. It includes <strong>integration with MediaWiki</strong> so that releasenotes can be posted there. You can also chose to <strong>create a file</strong> where you are totally free to create a formatted HTML with CSS, or just plain text, the way you like it.</p>
+<h2 id="stashnotifierplugin">Stash Notifier Plugin</h2>
+<p>It is available in <a href="https://wiki.jenkins-ci.org/display/JENKINS/StashNotifier+Plugin">Jenkins update sites</a>. It adds a post build step in Jenkns.</p>
+<p><img src="/content/images/2016/09/stash-notifier-plugin.png" alt="Post Build Step in Jenkins"></p>
+<p>It also reveals build status on Pull request view in Bitbucket Server.</p>
+<p><img src="/content/images/2016/09/stash-notifier-in-bitbucket.png" alt="Build status in Bitbucket Server"></p>
+<h1 id="conclusions">Conclusions</h1>
+<p>Hope you found something useful here. Pull requests and suggested features are always welcome. Please dont email me directly but instead try to file issues on GitHub!</p>
+
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/jenkins/">Jenkins</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/release-from-jenkins-by-pushing-git-tags/">Release from Jenkins by pushing Git tags</a></li>
+                            <li><a href="/jenkins-configuration-as-code-and-gitlab/">Jenkins Configuration as Code and GitLab</a></li>
+                            <li><a href="/jenkins-integration-on-steroids/">Jenkins Integration on Steroids</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/jenkins/">See all 9 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-git">
+        <a class="post-card-image-link" href="/gitflow-and-when-you-should-use-it/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/poshgitflowversion.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/gitflow-and-when-you-should-use-it/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Git</span>
+                <h2 class="post-card-title">GitFlow and when you should use it</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>There are a lot of people explaining GitFlow in different blog posts and videos. I could not find one that, using the correct arguments, explained what it is good for. These are my</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">4 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-java tag-clean-code">
+        <a class="post-card-image-link" href="/clean-invocations-of-dirty-methods/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/java-1.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/clean-invocations-of-dirty-methods/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Java</span>
+                <h2 class="post-card-title">Clean invocations of dirty methods</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I recently started to implement a client for a REST API. I was using RetroFit and here is one the resources used by the client. public interface BitBucketServerService {  @GET(&quot;/rest/api/1.</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">2 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Continuous Integration with Bitbucket Server and Jenkins</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Continuous%20Integration%20with%20Bitbucket%20Server%20and%20Jenkins&amp;url=https://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/continuous-integration-with-bitbucket-server-and-jenkins/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

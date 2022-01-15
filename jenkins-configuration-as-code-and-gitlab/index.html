@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Jenkins Configuration as Code and GitLab</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/jenkins-configuration-as-code-and-gitlab/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Jenkins Configuration as Code and GitLab" />
+    <meta property="og:description" content="I used Jenkins Configuration as Code and GitLab to demonstrate how Jenkins and its configuration (jobs, build process and global configuration) can be version controlled and fully automated." />
+    <meta property="og:url" content="https://bjurr.com/jenkins-configuration-as-code-and-gitlab/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2019/02/superhero.png" />
+    <meta property="article:published_time" content="2019-02-09T07:07:58.000Z" />
+    <meta property="article:modified_time" content="2019-02-10T06:52:55.000Z" />
+    <meta property="article:tag" content="Jenkins" />
+    <meta property="article:tag" content="pipeline" />
+    <meta property="article:tag" content="GitLab" />
+    <meta property="article:tag" content="continuous-integration" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jenkins Configuration as Code and GitLab" />
+    <meta name="twitter:description" content="I used Jenkins Configuration as Code and GitLab to demonstrate how Jenkins and its configuration (jobs, build process and global configuration) can be version controlled and fully automated." />
+    <meta name="twitter:url" content="https://bjurr.com/jenkins-configuration-as-code-and-gitlab/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2019/02/superhero.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Jenkins, pipeline, GitLab, continuous-integration" />
+    <meta property="og:image:width" content="320" />
+    <meta property="og:image:height" content="310" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "Jenkins Configuration as Code and GitLab",
+    "url": "https://bjurr.com/jenkins-configuration-as-code-and-gitlab/",
+    "datePublished": "2019-02-09T07:07:58.000Z",
+    "dateModified": "2019-02-10T06:52:55.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2019/02/superhero.png",
+        "width": 320,
+        "height": 310
+    },
+    "keywords": "Jenkins, pipeline, GitLab, continuous-integration",
+    "description": "I used Jenkins Configuration as Code and GitLab to demonstrate how Jenkins and its configuration (jobs, build process and global configuration) can be version controlled and fully automated.",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-jenkins tag-pipeline tag-gitlab tag-continuous-integration">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-jenkins tag-pipeline tag-gitlab tag-continuous-integration ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2019-02-09">9 February 2019</time>
+                        <span class="date-divider">/</span> <a href="/tag/jenkins/">Jenkins</a>
+                </section>
+                <h1 class="post-full-title">Jenkins Configuration as Code and GitLab</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2019/02/superhero.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>I used <a href="https://jenkins.io/projects/jcasc/">Jenkins Configuration as Code</a>, <em>JCasC</em>, and <a href="https://docs.gitlab.com/ce/">GitLab</a> to demonstrate how Jenkins and its configuration (<a href="https://github.com/jenkinsci/job-dsl-plugin/wiki">jobs</a>, <a href="https://jenkins.io/doc/book/pipeline/">build process</a> and <a href="https://jenkins.io/projects/jcasc/">global configuration</a>) can be version controlled and fully automated. I also integrated with <a href="https://docs.gitlab.com/ce/">GitLab</a> to show how <a href="https://docs.gitlab.com/ce/user/project/integrations/webhooks.html">webhooks</a> configuration can be automated to trigger the jobs in Jenkins.</p><p><strong>TL;DR:</strong> Here is the code: <a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></p><h2 id="the-problem">The Problem</h2><p>When I started with this I was at a client who had several large projects. Each project with several developers working full time. They all developed different systems. They all shared one Jenkins installation with a vast amount of jobs. Some of the problems with this setup are:</p><ul><li>You don't know how an <strong>update of a plugin</strong> affects all the jobs.</li><li>Hard to keep track of what <strong>plugins are actually needed</strong>.</li><li>Hard to keep track of <strong>what jobs are still needed</strong>. Git repositories changes name, gets removed, gets abandoned...</li><li>Hard to <strong>support developers</strong> because the way the different projects are using Jenkins <strong>diverge</strong>.</li><li>Build scripts are <strong>deployed in production for everyone</strong> at the same time.</li><li>Blocks innovation because you <strong>will not have confidence</strong> enough to refactor build scripts. You will instead just make smallest possible changes to global scripts and pray that it works for everyone.</li><li>Cannot, easily, <strong>revert changes</strong> made to the Jenkins installation.</li><li>Cannot, easily, <strong>work locally</strong> with the Jenkins installation. Cannot work in feature branches, just like you would in any other application repository.</li></ul><h2 id="the-solution">The Solution</h2><p>My solution is to express the entire Jenkins setup with scripts. Scripts that are version controlled in a Git repository. Now that <a href="https://jenkins.io/projects/jcasc/">JCasC</a> is released we have all parts need. </p><ul><li>I have a <em>master </em>branch in Git that represents the <em>bleeding edge</em> setup with the latest features.</li><li>Each project have their own branch in Git, pointing to their setup.</li></ul><p>Each project have their own installation of Jenkins. They can decide for themselves when they want to follow the road map and get the latest features. The road map is the path, a bunch of commits in Git, between the projects current branch and the <em>master</em> branch.</p><figure class="kg-card kg-image-card"><img src="/content/images/2019/02/jenkins-sandbox-master.png" class="kg-image"><figcaption>A master branch with bleeding edge features</figcaption></figure><p>At some point in time a snapshot of the current state, of the Jenkins configuration Git repository, may look like this.</p><figure class="kg-card kg-image-card"><img src="/content/images/2019/02/jenkins-sandbox-state.png" class="kg-image"><figcaption>Different projects can use different parents of the bleeding edge master</figcaption></figure><p>Here we see that:</p><ul><li>The <strong>Master</strong> configuration points to Git commit <strong>G</strong>. Which means <strong>G</strong> is the bleeding edge with the latest greatest features.</li><li><strong>Project E</strong> is an early adopter and is only one commit behind the <strong>Master</strong>.</li><li><strong>Project D</strong> is far behind.</li></ul><p>In this snapshot, perhaps, the people in <strong>Project D</strong> may not have much interest in CI/CD. They just want it to do its thing while they focus on their application code. The people in <strong>Project E</strong> seems to be more enthusiastic and wants the latest features.</p><p>This solution has a bunch of advantages:</p><ul><li>It <strong>encourages innovation</strong>. Anyone, in any project, can create their own feature branch in the Git repository to try any idea they might have. They can, easily, setup the entire Jenkins installation locally to fiddle with it. Develop scripts and try ideas. Even push the feature branch to a remote and suggest features to be included in the <strong>Master</strong>.</li><li>It <strong>reduces time spent on support</strong>. When the way the different projects use Jenkins does not diverge, their can be documentation that all projects can use. It also means that if <strong>Project C</strong> has a problem, they can talk to any member of any of the other projects. They don't necessarily need to talk to a member of the <strong>Master</strong> project.</li><li>Gives <strong>self confidence to refactor</strong> scripts. Ideas can be tested locally without having to be deployed in a shared Jenkins instance.</li><li>Allows <strong>revert of failed upgrades</strong>. If a project upgrades and something goes wrong, you simply revert the change in Git and you will be back to where you were before the upgrade.</li><li><strong>Nice and tidy structuring of jobs</strong>. You can organize the Jenkins jobs in folders to create a structure that maps to the structure you have in your Git service. Like in GitLab you have namespaces and I have a Jenkins folder for each namespace.</li></ul><figure class="kg-card kg-embed-card"><iframe width="480" height="270" src="https://www.youtube.com/embed/3R39J-6SjV8?feature=oembed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></figure><h2 id="implementation">Implementation</h2><p>The code, the Git repository containing the entire Jenkins setup, is available here:</p><ul><li><a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></li></ul>
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/jenkins/">Jenkins</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/release-from-jenkins-by-pushing-git-tags/">Release from Jenkins by pushing Git tags</a></li>
+                            <li><a href="/jenkins-integration-on-steroids/">Jenkins Integration on Steroids</a></li>
+                            <li><a href="/managing-1000-repos-in-jenkins-with-a-breeze/">Managing 1000+ Git repositories in Jenkins with a breeze</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/jenkins/">See all 9 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-wiremock tag-jaxrs tag-mock tag-stub tag-java">
+        <a class="post-card-image-link" href="/automatic-stubs-with-wiremock/">
+            <div class="post-card-image" style="background-image: url(/content/images/2019/04/wm.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/automatic-stubs-with-wiremock/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">wiremock</span>
+                <h2 class="post-card-title">Automatic stubs with Wiremock and JAX-RS</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I often see mock, or stub, servers being configured in frontend projects. I see hard coded JSON files that are very likely to not match the true responses of the actual API. Here</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">2 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-intellij tag-java tag-eclipse tag-ide">
+        <a class="post-card-image-link" href="/moving-to-intellij-idea-from-eclipse/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/08/intellij.jpeg)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/moving-to-intellij-idea-from-eclipse/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">intellij</span>
+                <h2 class="post-card-title">Moving to IntelliJ IDEA from Eclipse</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Being a long time Eclipse user I recently started using IntelliJ. Here are some notes on how I use it for Java and Kotlin. I will probably update this post continuously.ComparisonHere are</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">4 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Jenkins Configuration as Code and GitLab</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Jenkins%20Configuration%20as%20Code%20and%20GitLab&amp;url=https://bjurr.com/jenkins-configuration-as-code-and-gitlab/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/jenkins-configuration-as-code-and-gitlab/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

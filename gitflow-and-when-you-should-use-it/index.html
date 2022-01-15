@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>GitFlow and when you should use it</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=82bcb19d1c" />
+
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://bjurr.com/gitflow-and-when-you-should-use-it/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Tomas Bjerre:s blog" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="GitFlow and when you should use it" />
+    <meta property="og:description" content="There are a lot of people explaining GitFlow in different blog posts and videos. I could not find one that, using the correct arguments, explained what it is good for. These are my personal opinions and you don&#x27;t have to agree &#x3D;) GitFlow is really the simplest thing. Let&#x27;s divide the" />
+    <meta property="og:url" content="https://bjurr.com/gitflow-and-when-you-should-use-it/" />
+    <meta property="og:image" content="https://bjurr.com/content/images/2018/02/poshgitflowversion.png" />
+    <meta property="article:published_time" content="2017-02-25T04:56:31.000Z" />
+    <meta property="article:modified_time" content="2018-07-16T16:38:50.000Z" />
+    <meta property="article:tag" content="Git" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/tomas.bjerre" />
+    <meta property="article:author" content="https://www.facebook.com/tomas.bjerre" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GitFlow and when you should use it" />
+    <meta name="twitter:description" content="There are a lot of people explaining GitFlow in different blog posts and videos. I could not find one that, using the correct arguments, explained what it is good for. These are my personal opinions and you don&#x27;t have to agree &#x3D;) GitFlow is really the simplest thing. Let&#x27;s divide the" />
+    <meta name="twitter:url" content="https://bjurr.com/gitflow-and-when-you-should-use-it/" />
+    <meta name="twitter:image" content="https://bjurr.com/content/images/2018/02/poshgitflowversion.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Tomas Bjerre" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Git" />
+    <meta property="og:image:width" content="513" />
+    <meta property="og:image:height" content="385" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Tomas Bjerre:s blog",
+        "logo": "https://bjurr.com/content/images/2017/07/kna_crop_600.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Tomas Bjerre",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://bjurr.com/author/tomas/",
+        "sameAs": [
+            "http://tomasbjerreab.se/",
+            "https://www.facebook.com/tomas.bjerre"
+        ]
+    },
+    "headline": "GitFlow and when you should use it",
+    "url": "https://bjurr.com/gitflow-and-when-you-should-use-it/",
+    "datePublished": "2017-02-25T04:56:31.000Z",
+    "dateModified": "2018-07-16T16:38:50.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://bjurr.com/content/images/2018/02/poshgitflowversion.png",
+        "width": 513,
+        "height": 385
+    },
+    "keywords": "Git",
+    "description": "There are a lot of people explaining GitFlow in different blog posts and videos. I could not find one that, using the correct arguments, explained what it is good for. These are my personal opinions and you don&#x27;t have to agree &#x3D;) GitFlow is really the simplest thing. Let&#x27;s divide the",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://bjurr.com/"
+    }
+}
+    </script>
+
+    <script src="/public/ghost-sdk.min.js?v=82bcb19d1c"></script>
+<script>
+ghost.init({
+	clientId: "ghost-frontend",
+	clientSecret: "859d183cce14"
+});
+</script>
+    <meta name="generator" content="Ghost 2.11" />
+    <link rel="alternate" type="application/rss+xml" title="Tomas Bjerre:s blog" href="https://bjurr.com/rss" />
+
+</head>
+<body class="post-template tag-git">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://bjurr.com"><img src="/content/images/2017/07/kna_crop_600.png" alt="Tomas Bjerre:s blog" /></a>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/tomas.bjerre" title="Facebook" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://bjurr.com/rss" title="RSS" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-git ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2017-02-25">25 February 2017</time>
+                        <span class="date-divider">/</span> <a href="/tag/git/">Git</a>
+                </section>
+                <h1 class="post-full-title">GitFlow and when you should use it</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(/content/images/2018/02/poshgitflowversion.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>There are a lot of people explaining <a href="http://nvie.com/posts/a-successful-git-branching-model/">GitFlow</a> in different blog posts and videos. I could not find one that, using the correct arguments, explained what it is good for. These are my personal opinions and you don't have to agree =)</p>
+<p><em>GitFlow</em> is really the simplest thing. Let's divide the people working with a project into 2 different roles, <strong>developers</strong> and <strong>configuration manager(s)</strong>, and look at what they do.</p>
+<h1 id="gitflowasadeveloper">GitFlow as a developer</h1>
+<p>As a <strong>developer</strong> you have 2 kinds of branches.</p>
+<ul>
+<li><strong>develop</strong> Integration branch. Refers to the <em>next release</em>.</li>
+<li><strong>feature/X</strong> Feature branch where feature <em>X</em> is developed.</li>
+</ul>
+<p>You may have <strong>feature</strong> branches that branch out of other <strong>feature</strong> branches. In order to, easily, collaborate with other developers on a larger feature. You may call that large feature branch, <strong>integration</strong> branch.</p>
+<ul>
+<li>You should always merge code to <strong>develop</strong> as fast as you can. To spread commits quick and avoid merge conflicts.</li>
+<li>You should regularly <em>rebase</em>, or <em>merge</em>, <strong>develop</strong> into you <strong>feature</strong> branch. To base you code on the latest features and refactorings and avoid merge conflicts.</li>
+</ul>
+<p>To work on the next release. You branch out of <strong>develop</strong>, work with the <strong>feature</strong>, merge back to <strong>develop</strong>.</p>
+<pre><code>*    (develop)  Merge branch 'feature/work-with-correcting-a' into develop 
+|\  
+| *  (feature/work-with-correcting-a) Correcting a
+|/  
+*     Merge branch 'feature/work-with-a' into develop 
+|\  
+| *  (feature/work-with-a)  a 
+|/  
+* 
+</code></pre>
+<p>To work on the <em>next</em>-<em>next</em> release, or even further into the future, simply don't merge it back to <strong>develop</strong> before <em>next</em>-<em>next</em> is <em>next</em>. And keep in mind, it may be a good idea to merge it into <strong>develop</strong> earlier, to avoid merge conflicts, if you can do feature toggling.</p>
+<p>As a <strong>developer</strong>, this is all there is to it! This is how <strong>developers</strong> most often prefer to work. Just look at any open source repository. Most often you fork the main repository and the <strong>master</strong> in your fork is your <strong>feature</strong> branch. But still, <strong>this is as simple as it can get and this is how developers do it!</strong></p>
+<h1 id="gitflowasaconfigurationmanager">GitFlow as a configuration manager</h1>
+<p>As a <strong>configuration manager</strong> you have 2 kinds of branches.</p>
+<ul>
+<li><strong>master</strong> This is the what's in <strong>production</strong>.</li>
+<li><strong>release-X</strong> This is what's included in <strong>release</strong> <em>X</em>.</li>
+</ul>
+<p>As soon as it's <em>code freeze</em> it's time to create the first <em>release candidate</em>. That is done by branching out of <strong>develop</strong> into <strong>release-X</strong>. The version of <strong>develop</strong> is now set to 1.1, in Java that would mean changing the version to <em>1.1-SNAPSHOT</em> while in the release branch its still <em>1.0-SNAPSHOT</em>. The semantics of the versions is a side track, but I can recommend <a href="http://kylelieber.com/2012/06/maven-versioning-strategy/">this blog post</a>.</p>
+<pre><code>| *  (release-1, tag: 1.0-RC-1) Releasing RC 1
+| *  Setting version to 1.0-RC1
+* | (develop) Setting version to 1.1-SNAPSHOT
+|/
+</code></pre>
+<p>The whole point of the <strong>release-X</strong> branch is to provide a <em>code freeze</em> for the release. The <strong>developers</strong> can continue their work exactly as described above. Most Git services allows you to define permissions per branch and only configuration managers should have permission to <strong>release-X</strong>.</p>
+<p>The release candidate, <em>RC1</em>, is deployed and tested and if it's all good then it's released. But there is probably something that needs to be fixed. It can be done in different ways.</p>
+<ul>
+<li>
+<p>With <em>cherry-picking</em> from <strong>develop</strong>.<br>
+This is the prettiest but it may also not be possible. Merge conflicts may hinder this. There is also a risk that the <strong>develop</strong>-branch is too far ahead making it hard to know if the fix will work once it's in the <strong>release</strong>-branch. But I feel that it gives the <strong>configuration manager</strong> the most control of the release process.</p>
+</li>
+<li>
+<p>With merging a <strong>feature</strong>-branch that branches out of the <strong>release</strong>-branch.<br>
+This often my preferred choice in large teams. It gives the <strong>configuration manager</strong> control of what's included in the release. It avoids risk of merge conflicts. The tests done on that <strong>feature</strong>-branch can be trusted. It can be done with pull requests.</p>
+</li>
+<li>
+<p>With direct commits to the <strong>release</strong>-branch.<br>
+This may fit a technical team where the <strong>configuration manager</strong> is also a <strong>developer</strong>. It provides a release process for the current release and enables the <strong>developer</strong> to work on the next release in <strong>develop</strong>. It lacks support for code review but you may not need that in a small project.</p>
+</li>
+</ul>
+<p>Here is what it may look like if <em>cherry-picking</em> is used.</p>
+<pre><code>| *  Setting version to 1.0-SNAPSHOT
+| *  (release-1, tag: 1.0-RC-2) Releasing RC 2
+| *  Setting version to 1.0-RC2
+| *  Correcting a
+| *  Setting version to 1.0-SNAPSHOT
+| *  (tag: 1.0-RC-1) Releasing RC 1
+| *  Setting version to 1.0-RC1
+* | (develop) Setting version to 1.1-SNAPSHOT
+|/
+</code></pre>
+<p>Now if <em>RC2</em> is good and should be released then that exact artifact is deployed in production.</p>
+<ul>
+<li>Released commit, <strong>release-tag</strong>, in <strong>release-1</strong> is merged into <strong>master</strong>.
+<ul>
+<li>To keep track of what is in production.</li>
+</ul>
+</li>
+<li><strong>master</strong> is merged into <strong>develop</strong>, this is important:
+<ul>
+<li>To make sure any changes made in production are also in the next release.</li>
+<li>To allow a <em>fast-forward</em> of <strong>master</strong> next time you merge <strong>release-tag</strong> to <strong>master</strong>.</li>
+</ul>
+</li>
+</ul>
+<h1 id="conclusions">Conclusions</h1>
+<p>I've shown the two roles in <em>GitFlow</em> and I hope I made it obvious that its actually a very simple workflow! It will not fit all projects.</p>
+<p>You will probably <strong>not gain from using <em>GitFLow</em></strong> in a library. That is just used by other software. Where a release is just a process of packaging an artifact an making it available for other software to use. You can probably just release a new version if something needs to be fixed later, and the users of the software can just keep using an older version until things are worked out.</p>
+<p>You will probably <strong>gain from using <em>GitFlow</em></strong> if you have a <em>code freeze</em>. It enables a <em>code freeze</em> without preventing developers from working on the next release.</p>
+<p>If you just fire releases from <em>master</em>, without any branching, you can easily automate that process. If you need to make a release-branch and eventually merge it back into <em>master</em>, and <em>develop</em>, you will need a more complex flow. Which is a price you may not want to pay unless you are gaining something else from the flow!</p>
+
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/tomas/">Tomas Bjerre</a></h4>
+            <p>Read <a href="/author/tomas/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/tomas/">Read More</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                            style="background-image: url(/content/images/2017/07/kna_crop.jpg)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Tomas Bjerre:s blog &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/git/">Git</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/release-from-jenkins-by-pushing-git-tags/">Release from Jenkins by pushing Git tags</a></li>
+                            <li><a href="/jenkins-integration-on-steroids/">Jenkins Integration on Steroids</a></li>
+                            <li><a href="/managing-1000-repos-in-jenkins-with-a-breeze/">Managing 1000+ Git repositories in Jenkins with a breeze</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/git/">See all 8 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-gitlab tag-jenkins tag-continuous-integration tag-git">
+        <a class="post-card-image-link" href="/continuous-integration-with-gitlab-and-jenkins/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/gitlab.jpg)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/continuous-integration-with-gitlab-and-jenkins/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">GitLab</span>
+                <h2 class="post-card-title">Continuous Integration with GitLab and Jenkins</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>My client recently started using GitLab. I did not find the plugins needed to properly verify merge requests. Here is what I wanted to do: Trigger on merge requests events. Merge, compile, test</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">2 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-jenkins tag-github tag-bitbucket-server tag-static-code-analysis tag-git tag-plugins tag-continuous-integration">
+        <a class="post-card-image-link" href="/continuous-integration-with-bitbucket-server-and-jenkins/">
+            <div class="post-card-image" style="background-image: url(/content/images/2018/02/0722.sdt-atlassian.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/continuous-integration-with-bitbucket-server-and-jenkins/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">Jenkins</span>
+                <h2 class="post-card-title">Continuous Integration with Bitbucket Server and Jenkins</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>I have started several projects where I develop plugins for Bitbucket Server and Jenkins. They are independent of each other but I thought it would be nice to have a blog post about</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Tomas Bjerre
+                    </div>
+
+                        <a href="/author/tomas/" class="static-avatar"><img class="author-profile-image" src="//www.gravatar.com/avatar/8b306fbe92f324ae9717c03ec7651116?s&#x3D;250&amp;d&#x3D;mm&amp;r&#x3D;x" alt="Tomas Bjerre" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">9 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://bjurr.com">
+                <img src="/content/images/2017/07/kna_crop_fyrt.png" alt="Tomas Bjerre:s blog icon" />
+            <span>Tomas Bjerre:s blog</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">GitFlow and when you should use it</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=GitFlow%20and%20when%20you%20should%20use%20it&amp;url=https://bjurr.com/gitflow-and-when-you-should-use-it/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://bjurr.com/gitflow-and-when-you-should-use-it/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://bjurr.com">Tomas Bjerre:s blog</a> &copy; 2022</section>
+                <nav class="site-footer-nav">
+                    <a href="https://bjurr.com">Latest Posts</a>
+                    <a href="https://www.facebook.com/tomas.bjerre" target="_blank" rel="noopener">Facebook</a>
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script>
+        var images = document.querySelectorAll('.kg-gallery-image img');
+        images.forEach(function (image) {
+            var container = image.closest('.kg-gallery-image');
+            var width = image.attributes.width.value;
+            var height = image.attributes.height.value;
+            var ratio = width / height;
+            container.style.flex = ratio + ' 1 0%';
+        })
+    </script>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/built/jquery.fitvids.js?v=82bcb19d1c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52248240-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
