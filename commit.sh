@@ -46,7 +46,7 @@ wget http://127.0.0.1:2368/public/ghost-sdk.min.js -O public/ghost-sdk.min.js
 find . -type f -exec sed -i 's/http:\/\/localhost:2368/https:\/\/bjurr.com/g' {} +
 find . -type f -exec sed -i 's/rss\//rss/g' {} +
 
-echo "bjurr.com" > CNAME
+echo "bjurr.se" > CNAME
 
 git init
 git remote add origin git@github.com:tomasbjerre/bjurrcom.git
